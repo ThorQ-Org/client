@@ -8,7 +8,7 @@
 
 #include <cstdint>
 
-namespace ThorQ {
+namespace ThorQ::Api {
 
 class PasswordHash : public QObject
 {
@@ -26,6 +26,8 @@ public:
 
     PasswordHash(QObject* parent = nullptr);
     ~PasswordHash();
+
+    bool UpdateFromJson(const QJsonObject& json);
 
     QByteArray salt() const;
     QByteArray hash() const;

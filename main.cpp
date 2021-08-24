@@ -1,6 +1,6 @@
 #include "stylesheets.h"
 #include "collar/serial.h"
-#include "apiclient.h"
+#include "api/client.h"
 #include "ui/mainwidget.h"
 #include "ui/loginwidget.h"
 #include "ui/registerwidget.h"
@@ -25,12 +25,11 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include "apiclient.h"
 
 #include <filesystem>
 
 #define TEST_VR     0
-#define TEST_COM    0
+#define TEST_COM    1
 #define TEST_COLLAR 0
 #define TEST_PWHASH 0
 
@@ -56,8 +55,6 @@ int main(int argc, char** argv)
         settings.setValue("server/hostname", THORQ_SERVER_HOSTNAME);
     }
 
-    ApiClient cli;
-
 #if TEST_VR
     if (!ThorQ::VR::Initialize()) {
         qDebug() << "Failed to init VR";
@@ -77,17 +74,11 @@ int main(int argc, char** argv)
     app.setStyleSheet(ThorQ::StyleSheets::tryGetStylesheet("main"));
     app.setDesktopFileName(THORQ_APPLICATION_NAME);
     app.setWindowIcon(QIcon(":/shockGrey.ico"));
-    //app.setQuitOnLastWindowClosed(false);
+    app.setQuitOnLastWindowClosed(true);
 
 #if TEST_COM
 
-    ThorQ::ApiClient* apiClient = new ThorQ::ApiClient(&app);
-    QTimer* reconnectTimer = new QTimer(&app);
-    reconnectTimer->setInterval(5000);
-    reconnectTimer->setSingleShot(true);
-    QObject::connect(reconnectTimer, &QTimer::timeout, apiClient, &ThorQ::ApiClient::netConnect);
-    QObject::connect(apiClient, &ThorQ::ApiClient::netDisconnected, [reconnectTimer](){ reconnectTimer->start(); });
-
+    ThorQ::Api::Client* apiClient = new ThorQ::Api::Client(&app);
 #if TEST_COLLAR
 
     CollarSerial* ser = new CollarSerial(&app);
@@ -124,105 +115,6 @@ int main(int argc, char** argv)
                 )
             );
 
-    QVBoxLayout* mainLayout = new QVBoxLayout(&mainWindow);
-
-    auto accountController = apiClient->accountController();
-
-    ThorQ::AccountLoginWidget* loginWidget = new ThorQ::AccountLoginWidget(accountController, &mainWindow);
-    ThorQ::AccountRegisterWidget* registerWidget = new ThorQ::AccountRegisterWidget(accountController, &mainWindow);
-    ThorQ::AccountRecoverWidget* recoverWidget = new ThorQ::AccountRecoverWidget(accountController, &mainWindow);
-    QHBoxLayout* buttonsLayout = new QHBoxLayout();
-
-    QPushButton* registerButton = new QPushButton(&mainWindow);
-    QPushButton* recoverButton = new QPushButton(&mainWindow);
-
-    registerWidget->hide();
-    recoverWidget->hide();
-
-    registerButton->setText("REGISTER");
-    registerButton->setCursor(Qt::PointingHandCursor);
-
-    recoverButton->setText("RECOVER");
-    recoverButton->setCursor(Qt::PointingHandCursor);
-
-    mainLayout->addWidget(loginWidget);
-    mainLayout->addWidget(registerWidget);
-    mainLayout->addWidget(recoverWidget);
-
-    buttonsLayout->addWidget(registerButton);
-    buttonsLayout->addWidget(recoverButton);
-
-    mainLayout->addLayout(buttonsLayout);
-
-    mainWindow.setLayout(mainLayout);
-
-    QObject::connect(registerWidget, &ThorQ::AccountRegisterWidget::goBackButtonPressed, loginWidget, &QWidget::show);
-    QObject::connect(registerWidget, &ThorQ::AccountRegisterWidget::goBackButtonPressed, recoverButton, &QWidget::show);
-    QObject::connect(registerWidget, &ThorQ::AccountRegisterWidget::goBackButtonPressed, registerButton, &QWidget::show);
-
-    QObject::connect(recoverWidget, &ThorQ::AccountRecoverWidget::goBackButtonPressed, loginWidget, &QWidget::show);
-    QObject::connect(recoverWidget, &ThorQ::AccountRecoverWidget::goBackButtonPressed, recoverButton, &QWidget::show);
-    QObject::connect(recoverWidget, &ThorQ::AccountRecoverWidget::goBackButtonPressed, registerButton, &QWidget::show);
-
-    QObject::connect(registerButton, &QPushButton::pressed, loginWidget, &QWidget::hide);
-    QObject::connect(registerButton, &QPushButton::pressed, recoverButton, &QWidget::hide);
-    QObject::connect(registerButton, &QPushButton::pressed, registerButton, &QWidget::hide);
-    QObject::connect(registerButton, &QPushButton::pressed, registerWidget, &QWidget::show);
-
-    QObject::connect(recoverButton, &QPushButton::pressed, loginWidget, &QWidget::hide);
-    QObject::connect(recoverButton, &QPushButton::pressed, recoverButton, &QWidget::hide);
-    QObject::connect(recoverButton, &QPushButton::pressed, registerButton, &QWidget::hide);
-    QObject::connect(recoverButton, &QPushButton::pressed, recoverWidget, &QWidget::show);
-
-    ThorQ::MainWidget mainWidget;
-    QGridLayout* l1 = new QGridLayout(&mainWidget);
-
-    QSpinBox* shockVal = new QSpinBox(&mainWidget);
-    QSpinBox* vibrateVal = new QSpinBox(&mainWidget);
-
-    QPushButton* shock = new QPushButton(&mainWidget);
-    shock->setText("Shock");
-
-    QPushButton* vibrate = new QPushButton(&mainWidget);
-    vibrate->setText("Vibrate");
-
-    QPushButton* beep = new QPushButton(&mainWidget);
-    beep->setText("Beep");
-
-    shockVal->setMaximum(7);
-    vibrateVal->setMaximum(7);
-
-    l1->addWidget(shockVal, 1, 1);
-    l1->addWidget(vibrateVal, 1, 3);
-
-    l1->addWidget(shock, 3, 1);
-    l1->addWidget(vibrate, 3, 3);
-    l1->addWidget(beep, 3, 5);
-
-    l1->setColumnMinimumWidth(15, 0);
-    l1->setColumnMinimumWidth(15, 2);
-    l1->setColumnMinimumWidth(15, 4);
-    l1->setColumnMinimumWidth(15, 6);
-
-    l1->setRowMinimumHeight(15, 0);
-    l1->setRowMinimumHeight(15, 2);
-    l1->setRowMinimumHeight(15, 4);
-    l1->setRowMinimumHeight(15, 6);
-
-    mainWidget.adjustSize();
-
-    QObject::connect(vibrate, &QPushButton::clicked, [](){ qDebug() << "Clicked!"; });
-
-    QObject::connect(accountController, &ThorQ::AccountController::loggedIn, &mainWindow, &QWidget::hide);
-    QObject::connect(accountController, &ThorQ::AccountController::loggedIn, &mainWidget, &QWidget::show);
-    QObject::connect(accountController, &ThorQ::AccountController::loggedIn, &mainWidget, &QWidget::show);
-    QObject::connect(accountController, &ThorQ::AccountController::loggedOut, &mainWindow, &QWidget::show);
-    QObject::connect(accountController, &ThorQ::AccountController::loggedOut, &mainWidget, &QWidget::hide);
-    QObject::connect(accountController, &ThorQ::AccountController::loggedOut, &mainWidget, &QWidget::hide);
-
-    QObject::connect(apiClient, &ThorQ::ApiClient::connectionStatusChanged, loginWidget, &ThorQ::AccountLoginWidget::setConnectionStatus);
-
-    apiClient->netConnect();
     mainWindow.show();
 #endif
 

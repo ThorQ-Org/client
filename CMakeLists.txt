@@ -119,8 +119,6 @@ find_package (Threads REQUIRED)
 
 # --- Build ---
 set (${project}_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/user.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/image.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sysutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/validators.cpp
 
@@ -128,10 +126,16 @@ set (${project}_SOURCES
 
     ${CMAKE_CURRENT_SOURCE_DIR}/collar/serial.cpp
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiclient.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiuser.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiaccount.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/passwordhash.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/client.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/p2pclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/realtimeclient.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/persistentcookiejar.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/announcement.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/config.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/user.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/image.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/account.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/passwordhash.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/mainwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/userlistitem.cpp
@@ -154,19 +158,23 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.cpp
 )
 set (${project}_HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/user.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/image.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sysutils.h
     ${CMAKE_CURRENT_SOURCE_DIR}/validators.h
-
     ${CMAKE_CURRENT_SOURCE_DIR}/stylesheets.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/constants.h
 
     ${CMAKE_CURRENT_SOURCE_DIR}/collar/serial.h
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiclient.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiuser.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/apiaccount.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/passwordhash.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/client.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/p2pclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/realtimeclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/persistentcookiejar.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/announcement.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/config.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/user.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/image.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/account.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/passwordhash.h
 
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/mainwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/userlistitem.h
