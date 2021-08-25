@@ -1,21 +1,20 @@
 #ifndef APIACCOUNT_H
 #define APIACCOUNT_H
 
-#include "user.h"
+#include "apiobject.h"
 
 namespace ThorQ::Api {
 
 class PasswordHash;
 
-class Account : public User
+class Account : public ThorQ::Api::ApiObject
 {
     Q_OBJECT
 public:
-    Account(ThorQ::Api::User* apiUser);
     Account(ThorQ::Api::Client* apiClient);
-    Account(ThorQ::Api::ApiConsumer* apiConsumer);
+    Account(ThorQ::Api::ApiObject* apiObject);
 
-    bool UpdateFromJson(QJsonObject& json);
+    void update() override;
 
     QStringView email() const;
 signals:

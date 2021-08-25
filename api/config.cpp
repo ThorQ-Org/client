@@ -2,79 +2,100 @@
 
 #include "announcement.h"
 
+#include <QNetworkReply>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonValueRef>
 
 ThorQ::Api::Config::Config(ThorQ::Api::Client* apiClient)
-    : ThorQ::Api::ApiConsumer(apiClient)
+    : ThorQ::Api::ApiObject(apiClient)
 {
 }
-ThorQ::Api::Config::Config(ThorQ::Api::ApiConsumer* apiConsumer)
-    : ThorQ::Api::ApiConsumer(apiConsumer)
+ThorQ::Api::Config::Config(ThorQ::Api::ApiObject* apiObject)
+    : ThorQ::Api::ApiObject(apiObject)
 {
 }
 
-bool ThorQ::Api::Config::UpdateFromJson(QJsonObject& json)
+void ThorQ::Api::Config::update()
 {
-    QJsonValueRef jsonTosRef = json["tos"];
-    QJsonValueRef jsonAnnouncementsRef = json["announcements"];
-    QJsonValueRef jsonWebsocketsRef = json["websockets"];
-    QJsonValueRef jsonUploadsRef = json["uploads"];
-
-    if (!jsonTosRef.isObject() || !jsonAnnouncementsRef.isArray() || !jsonWebsocketsRef.isObject() || !jsonUploadsRef.isObject()) {
-        return false;
-    }
-
-    QJsonObject jsonTos = jsonTosRef.toObject();
-    QJsonArray jsonAnnouncements = jsonAnnouncementsRef.toArray();
-    QJsonObject jsonWebsockets = jsonWebsocketsRef.toObject();
-    QJsonObject jsonUploads = jsonUploadsRef.toObject();
-
-    setTosVersion(jsonTos["version"].toInt());
-    setTosMessage(jsonTos["content"].toString());
-
-    QList<ThorQ::Api::Announcement*> announcements;
-    foreach (const QJsonValue& jsonValue, jsonAnnouncements) {
-        auto jsonAnnouncement = jsonValue.toObject();
-
-        if (jsonAnnouncement.isEmpty()) {
-            return false;
+    QNetworkReply* reply = getRequest(QUrl("config"), false);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        QJsonParseError err;
+        auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
+        if (err.error != QJsonParseError::NoError) {
+            return;
         }
 
-        auto announcement = new ThorQ::Api::Announcement(this);
-        if (!announcement->UpdateFromJson(jsonAnnouncement)) {
-            return false;
+        QJsonValueRef jsonTosRef = json["tos"];
+        QJsonValueRef jsonAnnouncementsRef = json["announcements"];
+        QJsonValueRef jsonWebsocketsRef = json["websockets"];
+        QJsonValueRef jsonUploadsRef = json["uploads"];
+
+        if (!jsonTosRef.isObject() || !jsonAnnouncementsRef.isArray() || !jsonWebsocketsRef.isObject() || !jsonUploadsRef.isObject()) {
+            return;
         }
 
-        announcements.push_back(announcement);
-    }
-    setAnnouncements(announcements);
+        QJsonObject jsonTos = jsonTosRef.toObject();
+        QJsonArray jsonAnnouncements = jsonAnnouncementsRef.toArray();
+        QJsonObject jsonWebsockets = jsonWebsocketsRef.toObject();
+        QJsonObject jsonUploads = jsonUploadsRef.toObject();
 
-    setContactEmail(json["email_contact"].toString());
-    setDiscordInvite(json["discord_invite"].toString());
-    setPeer2PeerDisabled(json["disable_p2p"].toBool());
+        setTosVersion(jsonTos["version"].toInt());
+        setTosMessage(jsonTos["content"].toString());
 
-    QString releaseVersion = json["latest_release"].toString();
-    int suffixIdx = releaseVersion.length();
+        foreach (const QJsonValue& jsonValue, jsonAnnouncements) {
+            auto jsonAnnouncement = jsonValue.toObject();
 
-    setLatestReleaseVersion(QVersionNumber::fromString(releaseVersion, &suffixIdx));
-    setLatestReleaseType(releaseVersion.right(releaseVersion.size() - suffixIdx - 1));
+            if (jsonAnnouncement.isEmpty()) {
+                return;
+            }
 
-    setWebsocketRateMin(jsonWebsockets["rate_min"].toInt());
-    setWebsocketRateMax(jsonWebsockets["rate_max"].toInt());
+            auto announcement = new ThorQ::Api::Announcement(this);
 
-    setUploadSizeMax(jsonUploads["size_max"].toInt());
+            QJsonValueRef jsonTitleRef = jsonAnnouncement["title"];
+            QJsonValueRef jsonContentRef = jsonAnnouncement["content"];
+            QJsonValueRef jsonPublishedAtRef = jsonAnnouncement["published_at"];
 
-    int minRes = jsonUploads["res_min"].toInt();
-    setUploadResolutionMin(QSize{minRes, minRes});
+            if (!jsonTitleRef.isString() || !jsonContentRef.isString() || !jsonPublishedAtRef.isString()) {
+                return;
+            }
 
-    int maxRes = jsonUploads["res_max"].toInt();
-    setUploadResolutionMax(QSize{maxRes, maxRes});
+            QDateTime publishedAt = QDateTime::fromString(jsonPublishedAtRef.toString(), Qt::ISODate);
 
-    setImageUrlPrefix(QUrl(json["img_url_prefix"].toString()));
+            if (!publishedAt.isValid()) {
+                return;
+            }
 
-    return true;
+            announcement->setTitle(jsonTitleRef.toString());
+            announcement->setContent(jsonContentRef.toString());
+            announcement->setPublishedAt(publishedAt);
+
+            announcementAdd(announcement);
+        }
+
+        setContactEmail(json["email_contact"].toString());
+        setDiscordInvite(json["discord_invite"].toString());
+        setPeer2PeerDisabled(json["disable_p2p"].toBool());
+
+        QString releaseVersion = json["latest_release"].toString();
+        int suffixIdx = releaseVersion.length();
+
+        setLatestReleaseVersion(QVersionNumber::fromString(releaseVersion, &suffixIdx));
+        setLatestReleaseType(releaseVersion.right(releaseVersion.size() - suffixIdx - 1));
+
+        setWebsocketRateMin(jsonWebsockets["rate_min"].toInt());
+        setWebsocketRateMax(jsonWebsockets["rate_max"].toInt());
+
+        setUploadSizeMax(jsonUploads["size_max"].toInt());
+
+        int minRes = jsonUploads["res_min"].toInt();
+        setUploadResolutionMin(QSize{minRes, minRes});
+
+        int maxRes = jsonUploads["res_max"].toInt();
+        setUploadResolutionMax(QSize{maxRes, maxRes});
+
+        setImageUrlPrefix(QUrl(json["img_url_prefix"].toString()));
+    });
 }
 
 int ThorQ::Api::Config::tosVersion() const
@@ -163,11 +184,35 @@ void ThorQ::Api::Config::setTosMessage(const QString& message)
     }
 }
 
-void ThorQ::Api::Config::setAnnouncements(const QList<ThorQ::Api::Announcement*>& announcements)
+void ThorQ::Api::Config::announcementAdd(ThorQ::Api::Announcement* announcement)
 {
-    if (m_announcements != announcements) {
-        m_announcements = announcements;
-        emit announcementsChanged(announcements);
+    for (int i = 0; i < m_announcements.length(); i++) {
+        if (m_announcements[i] == announcement) {
+            return;
+        }
+
+        if (m_announcements[i]->publishedAt() >= announcement->publishedAt()) {
+            m_announcements.insert(i, announcement);
+            emit announcementAdded(i, announcement);
+        }
+    }
+}
+
+void ThorQ::Api::Config::announcementRemove(ThorQ::Api::Announcement* announcement)
+{
+    int i = m_announcements.indexOf(announcement);
+    if (i != -1) {
+        m_announcements.removeAt(i);
+        emit announcementRemoved(i, announcement);
+    }
+}
+
+void ThorQ::Api::Config::nnouncementsClear()
+{
+    for (int i = 0; i < m_announcements.length(); i++) {
+        ThorQ::Api::Announcement* announcement = m_announcements[i];
+        m_announcements.removeAt(i);
+        emit announcementRemoved(i, announcement);
     }
 }
 

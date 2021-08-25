@@ -2,38 +2,41 @@
 
 #include "passwordhash.h"
 
+#include <QNetworkReply>
+#include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonValue>
 
-ThorQ::Api::Account::Account(ThorQ::Api::User* apiUser)
-    : ThorQ::Api::User(apiUser)
-    , m_passwordHash(new ThorQ::Api::PasswordHash(this))
-{
-}
 ThorQ::Api::Account::Account(ThorQ::Api::Client* apiClient)
-    : ThorQ::Api::User(apiClient)
+    : ThorQ::Api::ApiObject(apiClient)
     , m_passwordHash(new ThorQ::Api::PasswordHash(this))
 {
 }
-ThorQ::Api::Account::Account(ThorQ::Api::ApiConsumer* apiConsumer)
-    : ThorQ::Api::User(apiConsumer)
+ThorQ::Api::Account::Account(ThorQ::Api::ApiObject* apiObject)
+    : ThorQ::Api::ApiObject(apiObject)
     , m_passwordHash(new ThorQ::Api::PasswordHash(this))
 {
 }
 
-bool ThorQ::Api::Account::UpdateFromJson(QJsonObject& json)
+void ThorQ::Api::Account::update()
 {
-    QJsonValueRef jsonPassword = json["password"];
-    QJsonValueRef jsonEmail = json["email"];
+    QNetworkReply* reply = getRequest(QUrl("account"), false);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        QJsonParseError err;
+        auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
+        if (err.error != QJsonParseError::NoError) {
+            return;
+        }
 
-    if (!jsonPassword.isObject() || !jsonEmail.isString()) {
-        return false;
-    }
+        QJsonValueRef jsonPassword = json["password"];
+        QJsonValueRef jsonEmail = json["email"];
 
-    m_passwordHash->UpdateFromJson(jsonPassword.toObject());
-    setEmail(jsonEmail.toString());
+        if (!jsonPassword.isObject() || !jsonEmail.isString()) {
+            return;
+        }
 
-    return true;
+        m_passwordHash->UpdateFromJson(jsonPassword.toObject());
+        setEmail(jsonEmail.toString());
+    });
 }
 
 QStringView ThorQ::Api::Account::email() const

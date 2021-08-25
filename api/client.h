@@ -1,10 +1,9 @@
 #ifndef APICLIENT_H
 #define APICLIENT_H
 
-#include "apiconsumer.h"
-
 #include <QObject>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 
 class QNetworkAccessManager;
 class QNetworkCookieJar;
@@ -29,10 +28,8 @@ public:
     QNetworkReply* deleteRequest(const QUrl& endpoint, bool requiresAuth = false) const;
 signals:
     void healthOkChanged(bool ok);
-    void configChanged(ThorQ::Api::Config* config);
 public slots:
     void getHealth();
-    void getConfig();
 private slots:
     void setHealthOk(bool ok);
 private:

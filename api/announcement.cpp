@@ -3,36 +3,9 @@
 #include <QJsonObject>
 #include <QJsonValueRef>
 
-ThorQ::Api::Announcement::Announcement(ThorQ::Api::Client* apiClient)
-    : ThorQ::Api::ApiConsumer(apiClient)
+ThorQ::Api::Announcement::Announcement(QObject* parent)
+    : QObject(parent)
 {
-}
-ThorQ::Api::Announcement::Announcement(ThorQ::Api::ApiConsumer* apiConsumer)
-    : ThorQ::Api::ApiConsumer(apiConsumer)
-{
-}
-
-bool ThorQ::Api::Announcement::UpdateFromJson(QJsonObject& json)
-{
-    QJsonValueRef jsonTitleRef = json["title"];
-    QJsonValueRef jsonContentRef = json["content"];
-    QJsonValueRef jsonPublishedAtRef = json["published_at"];
-
-    if (!jsonTitleRef.isString() || !jsonContentRef.isString() || !jsonPublishedAtRef.isString()) {
-        return false;
-    }
-
-    QDateTime publishedAt = QDateTime::fromString(jsonPublishedAtRef.toString(), Qt::ISODate);
-
-    if (!publishedAt.isValid()) {
-        return false;
-    }
-
-    setTitle(jsonTitleRef.toString());
-    setContent(jsonContentRef.toString());
-    setPublishedAt(publishedAt);
-
-    return true;
 }
 
 QStringView ThorQ::Api::Announcement::title() const

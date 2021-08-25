@@ -2,40 +2,46 @@
 
 #include "image.h"
 
+#include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 
-ThorQ::Api::User::User(ThorQ::Api::Client* apiClient)
-    : ThorQ::Api::ApiConsumer(apiClient)
-    , m_id()
+ThorQ::Api::User::User(QString id, ThorQ::Api::Client* apiClient)
+    : ThorQ::Api::ApiObject(apiClient)
+    , m_id(id)
     , m_username()
     , m_profilePicture(new ThorQ::Api::Image(this))
 {
 }
-ThorQ::Api::User::User(ThorQ::Api::ApiConsumer* apiConsumer)
-    : ThorQ::Api::ApiConsumer(apiConsumer)
-    , m_id()
+ThorQ::Api::User::User(QString id, ThorQ::Api::ApiObject* apiObject)
+    : ThorQ::Api::ApiObject(apiObject)
+    , m_id(id)
     , m_username()
     , m_profilePicture(new ThorQ::Api::Image(this))
 {
 }
 
-bool ThorQ::Api::User::UpdateFromJson(QJsonObject& json)
+void ThorQ::Api::User::update()
 {
-    QJsonValueRef jsonIdRef = json["id"];
-    QJsonValueRef jsonUsernameRef = json["username"];
-    QJsonValueRef jsonProfilePictureIdRef = json["pfp_id"];
+    QNetworkReply* reply = getRequest(QUrl("user/" + m_id), true);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        QJsonParseError err;
+        auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
+        if (err.error != QJsonParseError::NoError) {
+            return;
+        }
 
-    if (!jsonIdRef.isString() || !jsonUsernameRef.isString() || !jsonProfilePictureIdRef.isString()) {
-        return false;
-    }
+        QJsonValueRef jsonUsernameRef = json["username"];
+        QJsonValueRef jsonProfilePictureIdRef = json["pfp_id"];
 
-    m_id = jsonIdRef.toString();
-    m_username = jsonUsernameRef.toString();
-    m_profilePicture->setImageId(jsonProfilePictureIdRef.toString());
+        if (!jsonUsernameRef.isString() || !jsonProfilePictureIdRef.isString()) {
+            return;
+        }
 
-    return true;
+        m_username = jsonUsernameRef.toString();
+        m_profilePicture->setImageId(jsonProfilePictureIdRef.toString());
+    });
 }
 
 QStringView ThorQ::Api::User::id() const

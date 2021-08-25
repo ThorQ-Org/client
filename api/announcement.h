@@ -1,7 +1,7 @@
 #ifndef ANNOUNCEMENT_H
 #define ANNOUNCEMENT_H
 
-#include "apiconsumer.h"
+#include "apiobject.h"
 
 #include <QObject>
 #include <QDateTime>
@@ -9,14 +9,11 @@
 
 namespace ThorQ::Api {
 
-class Announcement : public ThorQ::Api::ApiConsumer
+class Announcement : public QObject
 {
     Q_OBJECT
 public:
-    Announcement(ThorQ::Api::Client* apiClient);
-    Announcement(ThorQ::Api::ApiConsumer* apiConsumer);
-
-    bool UpdateFromJson(QJsonObject& json);
+    Announcement(QObject* parent = nullptr);
 
     QStringView title() const;
     QStringView content() const;

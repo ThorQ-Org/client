@@ -1,7 +1,7 @@
 #ifndef APIUSER_H
 #define APIUSER_H
 
-#include "apiconsumer.h"
+#include "apiobject.h"
 
 #include <QObject>
 #include <QStringView>
@@ -11,14 +11,14 @@ namespace ThorQ::Api {
 
 class Image;
 
-class User : public ThorQ::Api::ApiConsumer
+class User : public ThorQ::Api::ApiObject
 {
     Q_OBJECT
 public:
-    User(ThorQ::Api::Client* apiClient);
-    User(ThorQ::Api::ApiConsumer* apiConsumer);
+    User(QString id, ThorQ::Api::Client* apiClient);
+    User(QString id, ThorQ::Api::ApiObject* apiObject);
 
-    bool UpdateFromJson(QJsonObject& json);
+    void update() override;
 
     QStringView id() const;
     QStringView username() const;
@@ -28,7 +28,7 @@ signals:
 public slots:
     void setUsername(const QString& username);
 private:
-    QString m_id;
+    const QString m_id;
     QString m_username;
     ThorQ::Api::Image* m_profilePicture;
 };

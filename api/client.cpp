@@ -4,7 +4,6 @@
 #include "account.h"
 
 #include "persistentcookiejar.h"
-#include "apiconsumer.h"
 #include "constants.h"
 
 #include <QNetworkAccessManager>
@@ -22,7 +21,7 @@ ThorQ::Api::Client::Client(QObject* parent)
 {
     m_networkAccessManager->setCookieJar(new ThorQ::PersistentCookieJar(m_networkAccessManager));
     getHealth();
-    getConfig();
+    m_config->update();
 }
 
 ThorQ::Api::Config* ThorQ::Api::Client::config() const
@@ -70,18 +69,6 @@ void ThorQ::Api::Client::getHealth()
         auto doc = QJsonDocument::fromJson(reply->readAll(), &err);
         if (err.error == QJsonParseError::NoError) {
             setHealthOk(doc.object()["ok"].toBool(false));
-        }
-    });
-}
-
-void ThorQ::Api::Client::getConfig()
-{
-    QNetworkReply* reply = getRequest(QUrl("config"), false);
-    QObject::connect(reply, &QNetworkReply::finished, [reply, this](){
-        QJsonParseError err;
-        auto doc = QJsonDocument::fromJson(reply->readAll(), &err).object();
-        if (err.error == QJsonParseError::NoError) {
-            m_config->UpdateFromJson(doc);
         }
     });
 }

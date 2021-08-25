@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "apiconsumer.h"
+#include "apiobject.h"
 
 #include <QObject>
 #include <QVersionNumber>
@@ -12,14 +12,14 @@ namespace ThorQ::Api {
 
 class Announcement;
 
-class Config : public ThorQ::Api::ApiConsumer
+class Config : public ThorQ::Api::ApiObject
 {
     Q_OBJECT
 public:
     Config(ThorQ::Api::Client* apiClient);
-    Config(ThorQ::Api::ApiConsumer* apiConsumer);
+    Config(ThorQ::Api::ApiObject* apiObject);
 
-    bool UpdateFromJson(QJsonObject& json);
+    void update() override;
 
     int tosVersion() const;
     QStringView tosMessage() const;
@@ -38,7 +38,10 @@ public:
 signals:
     void tosVersionChanged(int version);
     void tosMessageChanged(const QString& message);
-    void announcementsChanged(const QList<ThorQ::Api::Announcement*>& announcements);
+
+    void announcementAdded(int index, ThorQ::Api::Announcement* announcements);
+    void announcementRemoved(int index, ThorQ::Api::Announcement* announcements);
+
     void contactEmailChanged(const QString& email);
     void discordInviteChanged(const QString& invite);
     void peer2PeerDisabledChanged(bool disabled);
@@ -53,7 +56,11 @@ signals:
 public slots:
     void setTosVersion(int version);
     void setTosMessage(const QString& message);
-    void setAnnouncements(const QList<ThorQ::Api::Announcement*>& announcements);
+
+    void announcementAdd(ThorQ::Api::Announcement* announcement);
+    void announcementRemove(ThorQ::Api::Announcement* announcement);
+    void nnouncementsClear();
+
     void setContactEmail(const QString& email);
     void setDiscordInvite(const QString& invite);
     void setPeer2PeerDisabled(bool disabled);
