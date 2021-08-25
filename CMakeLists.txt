@@ -127,7 +127,8 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/collar/serial.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/api/client.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/api/p2pclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/p2pclient.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/apiconsumer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/api/realtimeclient.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/api/persistentcookiejar.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/api/announcement.cpp
@@ -167,6 +168,7 @@ set (${project}_HEADERS
 
     ${CMAKE_CURRENT_SOURCE_DIR}/api/client.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/p2pclient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/apiconsumer.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/realtimeclient.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/persistentcookiejar.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/announcement.h

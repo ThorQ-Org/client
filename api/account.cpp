@@ -5,8 +5,18 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
-ThorQ::Api::Account::Account(QObject* parent)
-    : ThorQ::Api::User(parent)
+ThorQ::Api::Account::Account(ThorQ::Api::User* apiUser)
+    : ThorQ::Api::User(apiUser)
+    , m_passwordHash(new ThorQ::Api::PasswordHash(this))
+{
+}
+ThorQ::Api::Account::Account(ThorQ::Api::Client* apiClient)
+    : ThorQ::Api::User(apiClient)
+    , m_passwordHash(new ThorQ::Api::PasswordHash(this))
+{
+}
+ThorQ::Api::Account::Account(ThorQ::Api::ApiConsumer* apiConsumer)
+    : ThorQ::Api::User(apiConsumer)
     , m_passwordHash(new ThorQ::Api::PasswordHash(this))
 {
 }

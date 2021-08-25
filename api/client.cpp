@@ -1,8 +1,10 @@
 #include "client.h"
 
 #include "config.h"
+#include "account.h"
 
 #include "persistentcookiejar.h"
+#include "apiconsumer.h"
 #include "constants.h"
 
 #include <QNetworkAccessManager>
@@ -10,19 +12,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-QNetworkRequest ThorQ::Api::Client::CreateRequest(const QString& endpoint)
-{
-    QNetworkRequest req(m_apiUrl.resolved(QUrl(endpoint)));
-    req.setRawHeader("Hardware-Id", QSysInfo::machineUniqueId());
-    return req;
-}
-
 
 ThorQ::Api::Client::Client(QObject* parent)
     : QObject(parent)
+    , m_apiUrl(THORQ_SERVER_API_ENDPOINT)
     , m_networkAccessManager(new QNetworkAccessManager(this))
-    , m_apiUrl(THORQ_SERVER_HOSTNAME)
     , m_config(new ThorQ::Api::Config(this))
+    , m_account(new ThorQ::Api::Account(this))
 {
     m_networkAccessManager->setCookieJar(new ThorQ::PersistentCookieJar(m_networkAccessManager));
     getHealth();
@@ -39,9 +35,36 @@ ThorQ::Api::Account* ThorQ::Api::Client::currentAccount() const
     return m_account;
 }
 
+QNetworkReply* ThorQ::Api::Client::headRequest(const QUrl& endpoint, bool requiresAuth) const
+{
+    return m_networkAccessManager->head(createRequest(endpoint, requiresAuth));
+}
+
+QNetworkReply* ThorQ::Api::Client::getRequest(const QUrl& endpoint, bool requiresAuth) const
+{
+    return m_networkAccessManager->get(createRequest(endpoint, requiresAuth));
+}
+
+QNetworkReply* ThorQ::Api::Client::postRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const
+{
+    return m_networkAccessManager->post(createRequest(endpoint, requiresAuth), data);
+}
+
+QNetworkReply* ThorQ::Api::Client::putRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const
+{
+    return m_networkAccessManager->put(createRequest(endpoint, requiresAuth), data);
+}
+
+QNetworkReply* ThorQ::Api::Client::deleteRequest(const QUrl& endpoint, bool requiresAuth) const
+{
+    return m_networkAccessManager->deleteResource(createRequest(endpoint, requiresAuth));
+}
+
+
 void ThorQ::Api::Client::getHealth()
 {
-    QNetworkReply* reply = m_networkAccessManager->get(CreateRequest("health"));
+
+    QNetworkReply* reply = getRequest(QUrl("health"), false);
     QObject::connect(reply, &QNetworkReply::finished, [reply, this](){
         QJsonParseError err;
         auto doc = QJsonDocument::fromJson(reply->readAll(), &err);
@@ -53,7 +76,7 @@ void ThorQ::Api::Client::getHealth()
 
 void ThorQ::Api::Client::getConfig()
 {
-    QNetworkReply* reply = m_networkAccessManager->get(CreateRequest("config"));
+    QNetworkReply* reply = getRequest(QUrl("config"), false);
     QObject::connect(reply, &QNetworkReply::finished, [reply, this](){
         QJsonParseError err;
         auto doc = QJsonDocument::fromJson(reply->readAll(), &err).object();
@@ -69,4 +92,14 @@ void ThorQ::Api::Client::setHealthOk(bool ok)
         m_healthOk = ok;
         emit healthOkChanged(ok);
     }
+}
+
+QNetworkRequest ThorQ::Api::Client::createRequest(const QUrl& endpoint, bool requiresAuth) const
+{
+    QNetworkRequest req(m_apiUrl.resolved(endpoint));
+    req.setRawHeader("Hardware-Id", QSysInfo::machineUniqueId());
+    if (requiresAuth) {
+        // TODO: implement me
+    }
+    return req;
 }

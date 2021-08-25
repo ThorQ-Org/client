@@ -11,7 +11,9 @@ class Account : public User
 {
     Q_OBJECT
 public:
-    Account(QObject* parent = nullptr);
+    Account(ThorQ::Api::User* apiUser);
+    Account(ThorQ::Api::Client* apiClient);
+    Account(ThorQ::Api::ApiConsumer* apiConsumer);
 
     bool UpdateFromJson(QJsonObject& json);
 

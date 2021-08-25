@@ -1,6 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "apiconsumer.h"
+
 #include <QObject>
 #include <QVersionNumber>
 #include <QSize>
@@ -10,11 +12,12 @@ namespace ThorQ::Api {
 
 class Announcement;
 
-class Config : public QObject
+class Config : public ThorQ::Api::ApiConsumer
 {
     Q_OBJECT
 public:
-    Config(QObject* parent = nullptr);
+    Config(ThorQ::Api::Client* apiClient);
+    Config(ThorQ::Api::ApiConsumer* apiConsumer);
 
     bool UpdateFromJson(QJsonObject& json);
 

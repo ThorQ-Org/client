@@ -1,17 +1,20 @@
 #ifndef ANNOUNCEMENT_H
 #define ANNOUNCEMENT_H
 
+#include "apiconsumer.h"
+
 #include <QObject>
 #include <QDateTime>
 #include <QString>
 
 namespace ThorQ::Api {
 
-class Announcement : public QObject
+class Announcement : public ThorQ::Api::ApiConsumer
 {
     Q_OBJECT
 public:
-    Announcement(QObject* parent = nullptr);
+    Announcement(ThorQ::Api::Client* apiClient);
+    Announcement(ThorQ::Api::ApiConsumer* apiConsumer);
 
     bool UpdateFromJson(QJsonObject& json);
 

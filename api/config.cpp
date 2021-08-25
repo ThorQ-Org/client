@@ -6,8 +6,12 @@
 #include <QJsonArray>
 #include <QJsonValueRef>
 
-ThorQ::Api::Config::Config(QObject* parent)
-    : QObject(parent)
+ThorQ::Api::Config::Config(ThorQ::Api::Client* apiClient)
+    : ThorQ::Api::ApiConsumer(apiClient)
+{
+}
+ThorQ::Api::Config::Config(ThorQ::Api::ApiConsumer* apiConsumer)
+    : ThorQ::Api::ApiConsumer(apiConsumer)
 {
 }
 

@@ -48,13 +48,6 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
 
-    // Test the presence and variant of settings
-    QSettings settings;
-    if (!settings.contains("server/hostname") ||
-        !settings.contains("server/port")) {
-        settings.setValue("server/hostname", THORQ_SERVER_HOSTNAME);
-    }
-
 #if TEST_VR
     if (!ThorQ::VR::Initialize()) {
         qDebug() << "Failed to init VR";

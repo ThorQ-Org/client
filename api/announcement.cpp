@@ -3,8 +3,12 @@
 #include <QJsonObject>
 #include <QJsonValueRef>
 
-ThorQ::Api::Announcement::Announcement(QObject* parent)
-    : QObject(parent)
+ThorQ::Api::Announcement::Announcement(ThorQ::Api::Client* apiClient)
+    : ThorQ::Api::ApiConsumer(apiClient)
+{
+}
+ThorQ::Api::Announcement::Announcement(ThorQ::Api::ApiConsumer* apiConsumer)
+    : ThorQ::Api::ApiConsumer(apiConsumer)
 {
 }
 

@@ -6,8 +6,15 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-ThorQ::Api::User::User(QObject* parent)
-    : QObject(parent)
+ThorQ::Api::User::User(ThorQ::Api::Client* apiClient)
+    : ThorQ::Api::ApiConsumer(apiClient)
+    , m_id()
+    , m_username()
+    , m_profilePicture(new ThorQ::Api::Image(this))
+{
+}
+ThorQ::Api::User::User(ThorQ::Api::ApiConsumer* apiConsumer)
+    : ThorQ::Api::ApiConsumer(apiConsumer)
     , m_id()
     , m_username()
     , m_profilePicture(new ThorQ::Api::Image(this))

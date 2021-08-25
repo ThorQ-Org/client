@@ -1,6 +1,8 @@
 #ifndef APICLIENT_H
 #define APICLIENT_H
 
+#include "apiconsumer.h"
+
 #include <QObject>
 #include <QNetworkRequest>
 
@@ -20,6 +22,11 @@ public:
 
     ThorQ::Api::Config* config() const;
     ThorQ::Api::Account* currentAccount() const;
+    QNetworkReply* headRequest(const QUrl& endpoint, bool requiresAuth) const;
+    QNetworkReply* getRequest(const QUrl& endpoint, bool requiresAuth) const;
+    QNetworkReply* postRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const;
+    QNetworkReply* putRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const;
+    QNetworkReply* deleteRequest(const QUrl& endpoint, bool requiresAuth = false) const;
 signals:
     void healthOkChanged(bool ok);
     void configChanged(ThorQ::Api::Config* config);
@@ -29,14 +36,15 @@ public slots:
 private slots:
     void setHealthOk(bool ok);
 private:
-    QNetworkRequest CreateRequest(const QString& endpoint);
+    QNetworkRequest createRequest(const QUrl& endpoint, bool requiresAuth) const;
 
-    QNetworkAccessManager* m_networkAccessManager;
     QUrl m_apiUrl;
+    QUrl m_fileUrl;
+    QNetworkAccessManager* m_networkAccessManager;
 
-    bool m_healthOk;
     ThorQ::Api::Config* m_config;
     ThorQ::Api::Account* m_account;
+    bool m_healthOk;
 };
 
 }

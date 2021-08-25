@@ -8,9 +8,11 @@
 #define THORQ_ORGANIZATION_NAME "HeavenVR"
 #define THORQ_ORGANIZATION_DOMAIN "heavenvr.tech"
 #define THORQ_APPLICATION_DESCRIPTION "OpenSource program to control a shock-collar remotely from anywhere in the world"
-#define THORQ_SERVER_HOSTNAME "https://api.heavenvr.tech/thorq/"
+#define THORQ_SERVER_API_ENDPOINT "https://api.heavenvr.tech/thorq/"
+#define THORQ_SERVER_FILE_ENDPOINT "https://static.heavenvr.tech/thorq/"
 
 namespace ThorQ {
+
 constexpr std::uint16_t VERSION_MAJOR = 0;
 constexpr std::uint16_t VERSION_MINOR = 0;
 constexpr std::uint16_t VERSION_PATCH = 132;
@@ -39,6 +41,7 @@ constexpr int EMAIL_LEN_MAX = 254; ///< Maximum id length (https://web.archive.o
  */
 constexpr int DISCORDID_LEN_MIN = 5; ///< Minimum id length (1 char + "#xxxx")
 constexpr int DISCORDID_LEN_MAX = 37; ///< Maximum id length (32 chars + "#xxxx")
+
 }
 
 #endif // CONSTANTS_H

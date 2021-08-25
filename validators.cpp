@@ -101,23 +101,7 @@ constexpr bool IsValidDomainPart(const QChar*& it)
 }
 
 ThorQ::Validators::RetType ThorQ::Validators::EmailValidator(ThorQ::Validators::ArgType email)
-{/*
-    if (email.length() > ThorQ::EMAIL_LEN_MAX) {
-        return ThorQ::Validators::RetType(false, "Too long email");
-    }
-
-    if (email.length() < ThorQ::EMAIL_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Invalid email");
-    }
-
-    QRegExp mailRegex("\\b[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}\\b");
-    mailRegex.setCaseSensitivity(Qt::CaseInsensitive);
-    mailRegex.setPatternSyntax(QRegExp::RegExp);
-
-    if (!mailRegex.exactMatch(email.toString())) {
-        return ThorQ::Validators::RetType(false, "Invalid email");
-    }
-*/
+{
     const QChar* begin = email.data();
     const QChar* it = begin;
 

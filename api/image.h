@@ -1,16 +1,19 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include "apiconsumer.h"
+
 #include <QObject>
 #include <QPixmap>
 
 namespace ThorQ::Api {
 
-class Image : public QObject
+class Image : public ThorQ::Api::ApiConsumer
 {
     Q_OBJECT
 public:
-    Image(QObject* parent = nullptr);
+    Image(ThorQ::Api::Client* apiClient);
+    Image(ThorQ::Api::ApiConsumer* apiConsumer);
 
     QStringView id() const;
 signals:

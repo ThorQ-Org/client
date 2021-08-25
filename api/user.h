@@ -1,6 +1,8 @@
 #ifndef APIUSER_H
 #define APIUSER_H
 
+#include "apiconsumer.h"
+
 #include <QObject>
 #include <QStringView>
 #include <QString>
@@ -9,11 +11,12 @@ namespace ThorQ::Api {
 
 class Image;
 
-class User : public QObject
+class User : public ThorQ::Api::ApiConsumer
 {
     Q_OBJECT
 public:
-    User(QObject* parent = nullptr);
+    User(ThorQ::Api::Client* apiClient);
+    User(ThorQ::Api::ApiConsumer* apiConsumer);
 
     bool UpdateFromJson(QJsonObject& json);
 
