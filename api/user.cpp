@@ -1,5 +1,6 @@
 #include "user.h"
 
+#include "client.h"
 #include "image.h"
 
 #include <QNetworkReply>
@@ -24,7 +25,7 @@ ThorQ::Api::User::User(QString id, ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::User::update()
 {
-    QNetworkReply* reply = getRequest(QUrl("user/" + m_id), true);
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("user/" + m_id), true));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();

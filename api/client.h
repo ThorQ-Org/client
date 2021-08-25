@@ -21,11 +21,12 @@ public:
 
     ThorQ::Api::Config* config() const;
     ThorQ::Api::Account* currentAccount() const;
-    QNetworkReply* headRequest(const QUrl& endpoint, bool requiresAuth) const;
-    QNetworkReply* getRequest(const QUrl& endpoint, bool requiresAuth) const;
-    QNetworkReply* postRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const;
-    QNetworkReply* putRequest(const QUrl& endpoint, const QByteArray& data, bool requiresAuth) const;
-    QNetworkReply* deleteRequest(const QUrl& endpoint, bool requiresAuth = false) const;
+    QNetworkRequest createApiRequest(const QUrl& endpoint, bool requiresAuth) const;
+    QNetworkReply* requestHead(const QNetworkRequest& request) const;
+    QNetworkReply* requestGet(const QNetworkRequest& request) const;
+    QNetworkReply* requestPost(const QNetworkRequest& request, const QByteArray& dataurl) const;
+    QNetworkReply* requestPut(const QNetworkRequest& request, const QByteArray& dataurl) const;
+    QNetworkReply* requestDelete(const QNetworkRequest& request) const;
 signals:
     void healthOkChanged(bool ok);
 public slots:
@@ -33,7 +34,6 @@ public slots:
 private slots:
     void setHealthOk(bool ok);
 private:
-    QNetworkRequest createRequest(const QUrl& endpoint, bool requiresAuth) const;
 
     QUrl m_apiUrl;
     QUrl m_fileUrl;

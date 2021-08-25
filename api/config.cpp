@@ -1,5 +1,6 @@
 #include "config.h"
 
+#include "client.h"
 #include "announcement.h"
 
 #include <QNetworkReply>
@@ -18,7 +19,7 @@ ThorQ::Api::Config::Config(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Config::update()
 {
-    QNetworkReply* reply = getRequest(QUrl("config"), false);
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("config"), false));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();

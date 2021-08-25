@@ -1,5 +1,6 @@
 #include "account.h"
 
+#include "client.h"
 #include "passwordhash.h"
 
 #include <QNetworkReply>
@@ -19,7 +20,7 @@ ThorQ::Api::Account::Account(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Account::update()
 {
-    QNetworkReply* reply = getRequest(QUrl("account"), false);
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("account"), false));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();

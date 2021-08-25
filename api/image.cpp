@@ -1,6 +1,7 @@
 #include "image.h"
 
 #include "client.h"
+#include "constants.h"
 
 #include <QNetworkReply>
 #include <QJsonDocument>
@@ -22,7 +23,7 @@ ThorQ::Api::Image::Image(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Image::update()
 {
-    QNetworkReply* reply = getRequest(QUrl("img/" + m_id), false);
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("img/" + m_id), false));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
@@ -48,7 +49,10 @@ void ThorQ::Api::Image::setImageId(const QString& id)
         if (QPixmapCache::find(id, &m_data)) {
             emit imageLoaded();
         } else {
-            config();
+            auto reply = apiClient()->requestGet(QNetworkRequest(QUrl(THORQ_SERVER_FILE_ENDPOINT).resolved(QUrl(id))));
+            QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+                m_data.loadFromData(reply->readAll());
+            });
         }
     }
 }

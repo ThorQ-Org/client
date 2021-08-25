@@ -1,11 +1,17 @@
 #include "stylesheets.h"
-#include "collar/serial.h"
+
 #include "api/client.h"
+#include "api/config.h"
+#include "api/account.h"
+
 #include "ui/mainwidget.h"
 #include "ui/loginwidget.h"
 #include "ui/registerwidget.h"
 #include "ui/recoverwidget.h"
+
 #include "vr/openvroverlaycontroller.h"
+
+#include "collar/serial.h"
 
 #include <constants.h>
 
@@ -49,6 +55,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
 #if TEST_VR
+
     if (!ThorQ::VR::Initialize()) {
         qDebug() << "Failed to init VR";
         return EXIT_FAILURE;
@@ -62,6 +69,7 @@ int main(int argc, char** argv)
         qDebug() << "Failed to install VR manifest files";
         return EXIT_FAILURE;
     }
+
 #endif
 
     app.setStyleSheet(ThorQ::StyleSheets::tryGetStylesheet("main"));
@@ -72,6 +80,9 @@ int main(int argc, char** argv)
 #if TEST_COM
 
     ThorQ::Api::Client* apiClient = new ThorQ::Api::Client(&app);
+
+    apiClient->config()->update();
+    apiClient->currentAccount()->update();
 #if TEST_COLLAR
 
     CollarSerial* ser = new CollarSerial(&app);
@@ -109,9 +120,11 @@ int main(int argc, char** argv)
             );
 
     mainWindow.show();
+
 #endif
 
 #if TEST_VR
+
     QPixmap pix(":/uwu.png");
     QLabel lab;
     lab.setPixmap(pix);
@@ -121,12 +134,15 @@ int main(int argc, char** argv)
     ovr->setWidget(&lab);
     QObject::connect(ovr, &ThorQ::VR::OpenVROverlayController::vrQuit, ovr, &QObject::deleteLater);
     QObject::connect(ovr, &ThorQ::VR::OpenVROverlayController::vrQuit, &app, &QApplication::quit);
+
 #endif
 
     int retval = app.exec();
 
 #if TEST_VR
+
     ThorQ::VR::Shutdown();
+
 #endif
 
     return retval;
