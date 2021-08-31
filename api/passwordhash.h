@@ -13,6 +13,7 @@ namespace ThorQ::Api {
 class PasswordHash : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(PasswordHash)
 public:
     static const std::size_t SaltLength = 16;
     static const std::size_t HashLength = 32;

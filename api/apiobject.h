@@ -16,10 +16,11 @@ class Account;
 class ApiObject : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ApiObject)
 public:
     ApiObject(ThorQ::Api::Client* apiClient);
     ApiObject(ThorQ::Api::ApiObject* apiObject);
-
+public slots:
     virtual void update() = 0;
 protected:
     ThorQ::Api::Client* apiClient() const;

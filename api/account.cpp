@@ -20,11 +20,15 @@ ThorQ::Api::Account::Account(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Account::update()
 {
-    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("account"), false));
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("account")));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
         if (err.error != QJsonParseError::NoError) {
+            return;
+        }
+        if (json["ok"].toBool(true) == false) {
+            qDebug().noquote() << "Failed to fetch account:" << json["msg"].toString();
             return;
         }
 

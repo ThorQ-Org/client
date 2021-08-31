@@ -6,6 +6,7 @@
 class P2PClient : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(P2PClient)
 public:
     P2PClient(QObject* parent = nullptr);
 };

@@ -15,11 +15,10 @@ class Announcement;
 class Config : public ThorQ::Api::ApiObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Config)
 public:
     Config(ThorQ::Api::Client* apiClient);
     Config(ThorQ::Api::ApiObject* apiObject);
-
-    void update() override;
 
     int tosVersion() const;
     QStringView tosMessage() const;
@@ -54,6 +53,7 @@ signals:
     void uploadResolutionMaxChanged(QSize resolution);
     void imageUrlPrefixChanged(const QUrl& imageUrlPrefix);
 public slots:
+    void update() override;
     void setTosVersion(int version);
     void setTosMessage(const QString& message);
 

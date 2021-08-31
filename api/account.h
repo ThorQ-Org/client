@@ -10,16 +10,16 @@ class PasswordHash;
 class Account : public ThorQ::Api::ApiObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Account)
 public:
     Account(ThorQ::Api::Client* apiClient);
     Account(ThorQ::Api::ApiObject* apiObject);
-
-    void update() override;
 
     QStringView email() const;
 signals:
     void emailChanged(const QString& email);
 public slots:
+    void update() override;
     void setEmail(const QString& email);
 private:
     ThorQ::Api::PasswordHash* m_passwordHash;

@@ -1,9 +1,9 @@
-#include "mainwidget.h"
+#include "mainwindow.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-ThorQ::UI::MainWidget::MainWidget(QWidget *parent)
+ThorQ::UI::MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , m_vlayout(new QVBoxLayout())
     , m_hlayout(new QHBoxLayout())

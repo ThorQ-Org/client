@@ -10,6 +10,7 @@ namespace ThorQ {
 class PersistentCookieJar : public QNetworkCookieJar
 {
     Q_OBJECT
+    Q_DISABLE_COPY(PersistentCookieJar)
 public:
     PersistentCookieJar(QObject* parent = nullptr);
     ~PersistentCookieJar();

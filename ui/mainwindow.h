@@ -1,5 +1,5 @@
-#ifndef MAINWIDGET_H
-#define MAINWIDGET_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QWidget>
 
@@ -9,13 +9,13 @@ class QHBoxLayout;
 
 namespace ThorQ::UI {
 
-class MainWidget : public QWidget
+class MainWindow : public QWidget
 {
 	Q_OBJECT
-	Q_DISABLE_COPY(MainWidget)
+    Q_DISABLE_COPY(MainWindow)
 public:
-	MainWidget(QWidget* parent = nullptr);
-    ~MainWidget() = default;
+    MainWindow(QWidget* parent = nullptr);
+    ~MainWindow() = default;
 private:
     QGraphicsScene* m_userScene;
 
@@ -25,4 +25,4 @@ private:
 
 }
 
-#endif // MAINWIDGET_H
+#endif // MAINWINDOW_H

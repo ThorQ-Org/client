@@ -19,7 +19,7 @@ ThorQ::Api::Config::Config(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Config::update()
 {
-    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("config"), false));
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("config")));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();

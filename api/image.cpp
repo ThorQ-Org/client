@@ -23,7 +23,7 @@ ThorQ::Api::Image::Image(ThorQ::Api::ApiObject* apiObject)
 
 void ThorQ::Api::Image::update()
 {
-    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("img/" + m_id), false));
+    QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("img/" + m_id)));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();

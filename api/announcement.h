@@ -12,6 +12,7 @@ namespace ThorQ::Api {
 class Announcement : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Announcement)
 public:
     Announcement(QObject* parent = nullptr);
 
