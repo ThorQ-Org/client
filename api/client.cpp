@@ -12,13 +12,25 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+ThorQ::Api::Client* g_client;
+void ThorQ::Api::Client::InitializeSingleton(QObject* parent)
+{
+    g_client = new ThorQ::Api::Client(parent);
+}
+
+ThorQ::Api::Client* ThorQ::Api::Client::Singleton()
+{
+    return g_client;
+}
 
 ThorQ::Api::Client::Client(QObject* parent)
     : QObject(parent)
     , m_apiUrl(THORQ_SERVER_API_ENDPOINT)
+    , m_fileUrl(THORQ_SERVER_FILE_ENDPOINT)
     , m_networkAccessManager(new QNetworkAccessManager(this))
     , m_config(new ThorQ::Api::Config(this))
     , m_account(new ThorQ::Api::Account(this))
+    , m_healthOk(false)
 {
     m_networkAccessManager->setCookieJar(new ThorQ::PersistentCookieJar(m_networkAccessManager));
 
@@ -28,8 +40,6 @@ ThorQ::Api::Client::Client(QObject* parent)
             m_account->update();
         }
     });
-
-    getHealth();
 }
 
 ThorQ::Api::Config* ThorQ::Api::Client::config() const

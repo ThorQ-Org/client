@@ -17,8 +17,10 @@ class Client : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(Client)
-public:
     Client(QObject* parent = nullptr);
+public:
+    static void InitializeSingleton(QObject* parent = nullptr);
+    static ThorQ::Api::Client* Singleton();
 
     ThorQ::Api::Config* config() const;
 
@@ -45,8 +47,8 @@ private:
     QNetworkAccessManager* const m_networkAccessManager;
     ThorQ::Api::Config* const m_config;
 
-    bool m_healthOk;
     ThorQ::Api::Account* m_account;
+    bool m_healthOk;
 };
 
 }

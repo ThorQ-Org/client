@@ -27,11 +27,13 @@ int main(int argc, char** argv)
     app.setWindowIcon(QIcon(":/shockGrey.ico"));
     app.setQuitOnLastWindowClosed(false);
 
-    ThorQ::Api::Client* apiClient = new ThorQ::Api::Client(&app);
+    ThorQ::Api::Client::InitializeSingleton(&app);
+    ThorQ::Api::Client* apiClient = ThorQ::Api::Client::Singleton();
 
+    ThorQ::UI::WindowController* windowController = new ThorQ::UI::WindowController(apiClient);
+
+    apiClient->getHealth();
     apiClient->config()->update();
-
-    ThorQ::UI::WindowController* windowController = new ThorQ::UI::WindowController(&app);
 
     return app.exec();
 }
