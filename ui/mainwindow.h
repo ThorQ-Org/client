@@ -2,10 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
+#include <QRect>
 
-class QGraphicsScene;
+class QTimer;
 class QVBoxLayout;
 class QHBoxLayout;
+class QGraphicsScene;
 
 namespace ThorQ::UI {
 
@@ -16,11 +18,15 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow() = default;
+private slots:
+    void saveWindowState();
 private:
-    QGraphicsScene* m_userScene;
+    QTimer* m_settingsTimer;
+    QVBoxLayout* m_vlayout;
+    QHBoxLayout* m_hlayout;
 
-	QVBoxLayout* m_vlayout;
-	QHBoxLayout* m_hlayout;
+    QGraphicsScene* m_userScene;
+    QRect m_lastGeometry;
 };
 
 }
