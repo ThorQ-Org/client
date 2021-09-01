@@ -25,6 +25,7 @@ void ThorQ::Api::Account::update()
         QJsonParseError err;
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
         if (err.error != QJsonParseError::NoError) {
+            qDebug().noquote() << "Failed to parse account:" << err.errorString();
             return;
         }
         if (json["ok"].toBool(true) == false) {

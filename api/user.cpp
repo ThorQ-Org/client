@@ -41,7 +41,7 @@ void ThorQ::Api::User::update()
         }
 
         m_username = jsonUsernameRef.toString();
-        m_profilePicture->setImageId(jsonProfilePictureIdRef.toString());
+        m_profilePicture->setId(jsonProfilePictureIdRef.toString());
     });
 }
 

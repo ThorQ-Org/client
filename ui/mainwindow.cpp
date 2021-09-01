@@ -59,7 +59,7 @@ ThorQ::UI::MainWindow::MainWindow(QWidget *parent)
 
     // Initialize timer to autosave window geometry
     m_settingsTimer->setSingleShot(false);
-    m_settingsTimer->setInterval(250);
+    m_settingsTimer->setInterval(1000);
     QObject::connect(m_settingsTimer, &QTimer::timeout, this, &ThorQ::UI::MainWindow::saveWindowState);
     m_settingsTimer->start();
 }
