@@ -1,5 +1,5 @@
-#ifndef APICLIENT_H
-#define APICLIENT_H
+#ifndef THORQ_APICLIENT_H
+#define THORQ_APICLIENT_H
 
 #include <QObject>
 #include <QNetworkRequest>
@@ -53,4 +53,4 @@ private:
 
 }
 
-#endif // APICLIENT_H
+#endif // THORQ_APICLIENT_H

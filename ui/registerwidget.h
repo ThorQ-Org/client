@@ -1,5 +1,5 @@
-#ifndef REGISTERWIDGET_H
-#define REGISTERWIDGET_H
+#ifndef THORQ_REGISTERWIDGET_H
+#define THORQ_REGISTERWIDGET_H
 
 #include <QWidget>
 
@@ -48,4 +48,4 @@ private:
 
 }
 
-#endif // REGISTERWIDGET_H
+#endif // THORQ_REGISTERWIDGET_H

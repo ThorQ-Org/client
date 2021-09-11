@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef THORQ_CONFIG_H
+#define THORQ_CONFIG_H
 
 #include "apiobject.h"
 
@@ -91,4 +91,4 @@ private:
 
 }
 
-#endif // CONFIG_H
+#endif // THORQ_CONFIG_H

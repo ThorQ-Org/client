@@ -1,5 +1,5 @@
-#ifndef NAMEDLINEEDIT_H
-#define NAMEDLINEEDIT_H
+#ifndef THORQ_NAMEDLINEEDIT_H
+#define THORQ_NAMEDLINEEDIT_H
 
 #include <QWidget>
 #include <QString>
@@ -58,4 +58,4 @@ private:
 
 }
 
-#endif // NAMEDLINEEDIT_H
+#endif // THORQ_NAMEDLINEEDIT_H

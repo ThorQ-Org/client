@@ -1,5 +1,5 @@
-#ifndef OVRACTION_H
-#define OVRACTION_H
+#ifndef THORQ_OVRACTION_H
+#define THORQ_OVRACTION_H
 
 #include "openvr.h"
 #include "ovrinputvalue.h"
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // OVRACTION_H
+#endif // THORQ_OVRACTION_H

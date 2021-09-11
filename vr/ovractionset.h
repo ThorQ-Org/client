@@ -1,5 +1,5 @@
-#ifndef OVRACTIONSET_H
-#define OVRACTIONSET_H
+#ifndef THORQ_OVRACTIONSET_H
+#define THORQ_OVRACTIONSET_H
 
 #include "openvr.h"
 
@@ -43,4 +43,4 @@ private:
 };
 }
 
-#endif // OVRACTIONSET_H
+#endif // THORQ_OVRACTIONSET_H

@@ -1,5 +1,5 @@
-#ifndef CONTROLWIDGET_H
-#define CONTROLWIDGET_H
+#ifndef THORQ_CONTROLWIDGET_H
+#define THORQ_CONTROLWIDGET_H
 
 #include <QWidget>
 
@@ -26,4 +26,4 @@ private:
 
 }
 
-#endif // CONTROLWIDGET_H
+#endif // THORQ_CONTROLWIDGET_H

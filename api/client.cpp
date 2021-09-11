@@ -34,6 +34,7 @@ ThorQ::Api::Client::Client(QObject* parent)
 {
     m_networkAccessManager->setCookieJar(new ThorQ::PersistentCookieJar(m_networkAccessManager));
 
+    QObject::connect(this, &ThorQ::Api::Client::healthOkChanged, m_config, &ThorQ::Api::Config::update);
     QObject::connect(this, &ThorQ::Api::Client::healthOkChanged, [this](bool ok){
         // If the health of the API is ok, and we have a cookie; try to log in
         if (ok && m_networkAccessManager->cookieJar()->cookiesForUrl(m_apiUrl).size() != 0) {
@@ -60,6 +61,9 @@ ThorQ::Api::Account* ThorQ::Api::Client::currentAccount() const
 QNetworkRequest ThorQ::Api::Client::createApiRequest(const QUrl& endpoint) const
 {
     QUrl requestUrl = m_apiUrl.resolved(endpoint);
+
+    qDebug() << requestUrl.toString();
+
     QNetworkRequest req(requestUrl);
     req.setRawHeader("Hardware-Id", QSysInfo::machineUniqueId());
     return req;

@@ -1,5 +1,5 @@
-#ifndef LOGINWIDGET_H
-#define LOGINWIDGET_H
+#ifndef THORQ_LOGINWIDGET_H
+#define THORQ_LOGINWIDGET_H
 
 #include <QWidget>
 
@@ -45,4 +45,4 @@ private:
 
 }
 
-#endif // LOGINWIDGET_H
+#endif // THORQ_LOGINWIDGET_H

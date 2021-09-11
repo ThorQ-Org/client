@@ -1,5 +1,5 @@
-#ifndef OVRTRACKEDDEVICE_H
-#define OVRTRACKEDDEVICE_H
+#ifndef THORQ_OVRTRACKEDDEVICE_H
+#define THORQ_OVRTRACKEDDEVICE_H
 
 #include "openvr.h"
 
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // OVRDEVICE_H
+#endif // THORQ_OVRDEVICE_H

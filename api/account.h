@@ -1,5 +1,5 @@
-#ifndef APIACCOUNT_H
-#define APIACCOUNT_H
+#ifndef THORQ_APIACCOUNT_H
+#define THORQ_APIACCOUNT_H
 
 #include "apiobject.h"
 
@@ -28,4 +28,4 @@ private:
 
 }
 
-#endif // APIACCOUNT_H
+#endif // THORQ_APIACCOUNT_H

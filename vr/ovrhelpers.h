@@ -1,5 +1,5 @@
-#ifndef OVRHELPERS_H
-#define OVRHELPERS_H
+#ifndef THORQ_OVRHELPERS_H
+#define THORQ_OVRHELPERS_H
 
 #include <QMatrix4x4>
 
@@ -20,4 +20,4 @@ inline void ToHmdMatrix34(const QMatrix4x4& mat, vr::HmdMatrix34_t& out)
     }
 }
 
-#endif // OVRHELPERS_H
+#endif // THORQ_OVRHELPERS_H

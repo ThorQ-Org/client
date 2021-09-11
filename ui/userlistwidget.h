@@ -1,5 +1,5 @@
-#ifndef USERLISTWIDGET_H
-#define USERLISTWIDGET_H
+#ifndef THORQ_USERLISTWIDGET_H
+#define THORQ_USERLISTWIDGET_H
 
 #include <QWidget>
 
@@ -19,4 +19,4 @@ private:
 
 }
 
-#endif // USERLISTWIDGET_H
+#endif // THORQ_USERLISTWIDGET_H

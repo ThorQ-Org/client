@@ -120,6 +120,7 @@ find_package (Threads REQUIRED)
 # --- Build ---
 set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/sysutils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/pathutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/validators.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/stylesheets.cpp
@@ -151,6 +152,8 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/recoverwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/errorlabel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/namedlineedit.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowgeometrysaver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowpositionsaver.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrlaunchmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovraction.cpp
@@ -162,7 +165,10 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.cpp
 )
 set (${project}_HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/filetype.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sysutils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/pathutils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/fileutils.h
     ${CMAKE_CURRENT_SOURCE_DIR}/validators.h
     ${CMAKE_CURRENT_SOURCE_DIR}/stylesheets.h
     ${CMAKE_CURRENT_SOURCE_DIR}/constants.h
@@ -194,6 +200,8 @@ set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/recoverwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/errorlabel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/namedlineedit.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowgeometrysaver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowpositionsaver.h
 
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrlaunchmanager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrhelpers.h

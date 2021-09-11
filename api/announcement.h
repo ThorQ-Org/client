@@ -1,5 +1,5 @@
-#ifndef ANNOUNCEMENT_H
-#define ANNOUNCEMENT_H
+#ifndef THORQ_ANNOUNCEMENT_H
+#define THORQ_ANNOUNCEMENT_H
 
 #include "apiobject.h"
 
@@ -35,4 +35,4 @@ private:
 
 }
 
-#endif // ANNOUNCEMENT_H
+#endif // THORQ_ANNOUNCEMENT_H

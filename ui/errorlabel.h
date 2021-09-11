@@ -1,5 +1,5 @@
-#ifndef ERRORLABEL_H
-#define ERRORLABEL_H
+#ifndef THORQ_ERRORLABEL_H
+#define THORQ_ERRORLABEL_H
 
 #include <QLabel>
 
@@ -19,4 +19,4 @@ public:
 
 }
 
-#endif // ERRORLABEL_H
+#endif // THORQ_ERRORLABEL_H

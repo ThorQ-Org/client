@@ -1,5 +1,5 @@
-#ifndef FRIENDSHIP_H
-#define FRIENDSHIP_H
+#ifndef THORQ_FRIENDSHIP_H
+#define THORQ_FRIENDSHIP_H
 
 #include "apiobject.h"
 
@@ -23,4 +23,4 @@ private:
 
 }
 
-#endif // FRIENDSHIP_H
+#endif // THORQ_FRIENDSHIP_H

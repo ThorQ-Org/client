@@ -12,14 +12,14 @@ ThorQ::Api::User::User(QString id, ThorQ::Api::Client* apiClient)
     : ThorQ::Api::ApiObject(apiClient)
     , m_id(id)
     , m_username()
-    , m_profilePicture(new ThorQ::Api::Image(this))
+    , m_profilePicture(ThorQ::Api::Image::DefaultImage())
 {
 }
 ThorQ::Api::User::User(QString id, ThorQ::Api::ApiObject* apiObject)
     : ThorQ::Api::ApiObject(apiObject)
     , m_id(id)
     , m_username()
-    , m_profilePicture(new ThorQ::Api::Image(this))
+    , m_profilePicture(ThorQ::Api::Image::DefaultImage())
 {
 }
 
@@ -33,15 +33,13 @@ void ThorQ::Api::User::update()
             return;
         }
 
-        QJsonValueRef jsonUsernameRef = json["username"];
-        QJsonValueRef jsonProfilePictureIdRef = json["pfp_id"];
+        m_username = json["username"].toString();
 
-        if (!jsonUsernameRef.isString() || !jsonProfilePictureIdRef.isString()) {
-            return;
+        QString profilePictureId = json["pfp_id"].toString();
+
+        if (m_profilePicture->id() != profilePictureId) {
+            setProfilePicture(new ThorQ::Api::Image(profilePictureId, this)); // TODO: make a ApiImageManager where apiobjects can get images by id, for less memory usage and faster load times
         }
-
-        m_username = jsonUsernameRef.toString();
-        m_profilePicture->setId(jsonProfilePictureIdRef.toString());
     });
 }
 
@@ -75,6 +73,14 @@ void ThorQ::Api::User::setUsername(const QString& username)
     if (m_username != username) {
         m_username = username;
         emit usernameChanged(username);
+    }
+}
+
+void ThorQ::Api::User::setProfilePicture(ThorQ::Api::Image* profilePicture)
+{
+    if (m_profilePicture != profilePicture) {
+        m_profilePicture = profilePicture;
+        emit profilePictureChanged(profilePicture);
     }
 }
 

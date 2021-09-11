@@ -13,6 +13,6 @@ ThorQ::UI::WindowController::WindowController(QObject* parent)
     , m_loginWindow(new ThorQ::UI::LoginWindow())
     , m_mainWindow(new ThorQ::UI::MainWindow())
 {
-    //m_loginWindow->show();
-    m_mainWindow->show();
+    m_loginWindow->show();
+    //m_mainWindow->show();
 }

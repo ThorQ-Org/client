@@ -26,12 +26,14 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     // Register button
     m_registerButton->setText(tr("Register"));
     m_registerButton->setCursor(Qt::PointingHandCursor);
+    m_registerButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QObject::connect(m_registerButton, &QPushButton::clicked, this, &ThorQ::UI::RegisterWidget::handleRegisterClicked);
 
     // Username input
     m_usernameInput->setName(tr("USERNAME"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_usernameInput->setSimpleText(true);
+    m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, m_usernameInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleUsernameInputChanged);
@@ -40,6 +42,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_emailInput->setName(tr("EMAIL"));
     m_emailInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_emailInput->setSimpleText(true);
+    m_emailInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_emailInput->setInputValidator(ThorQ::Validators::EmailValidator);
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, m_emailInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleEmailInputChanged);
@@ -47,13 +50,15 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     // Password input
     m_passwordInput->setName(tr("PASSWORD"));
     m_passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
-    m_passwordInput->setInputValidator(ThorQ::Validators::EmailValidator);
+    m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_passwordInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
 
     // Confirm password input
     m_confirmPasswordInput->setName(tr("CONFIRM PASSWORD"));
     m_confirmPasswordInput->setEchoMode(QLineEdit::EchoMode::Password);
+    m_confirmPasswordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
 

@@ -1,5 +1,5 @@
-#ifndef VALIDATORS_H
-#define VALIDATORS_H
+#ifndef THORQ_VALIDATORS_H
+#define THORQ_VALIDATORS_H
 
 #include <QPair>
 #include <QString>
@@ -22,4 +22,4 @@ RetType EmailValidator(ArgType email);
 
 }
 
-#endif // VALIDATORS_H
+#endif // THORQ_VALIDATORS_H

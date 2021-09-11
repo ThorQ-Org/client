@@ -1,5 +1,5 @@
-#ifndef STYLESHEETS_H
-#define STYLESHEETS_H
+#ifndef THORQ_STYLESHEETS_H
+#define THORQ_STYLESHEETS_H
 
 #include <QString>
 
@@ -9,4 +9,4 @@ QString tryGetStylesheet(QString styleSheetName);
 }
 }
 
-#endif // STYLESHEETS_H
+#endif // THORQ_STYLESHEETS_H

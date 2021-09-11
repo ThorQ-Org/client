@@ -1,7 +1,10 @@
 #include "image.h"
 
 #include "client.h"
+#include "pathutils.h"
 #include "constants.h"
+
+#include <mutex>
 
 #include <QNetworkReply>
 #include <QJsonDocument>
@@ -10,57 +13,75 @@
 #include <QMimeDatabase>
 #include <QMovie>
 #include <QBuffer>
+#include <QStandardPaths>
+#include <QFile>
+#include <QDir>
 
-ThorQ::Api::Image::Image(ThorQ::Api::Client* apiClient)
+std::mutex l_defaultImage;
+ThorQ::Api::Image* g_defaultImage = nullptr;
+ThorQ::Api::Image* ThorQ::Api::Image::DefaultImage()
+{
+    std::scoped_lock l(l_defaultImage);
+
+    if (g_defaultImage == nullptr) {
+        g_defaultImage = new ThorQ::Api::Image("default", ThorQ::Api::Client::Singleton());
+        g_defaultImage->update();
+    }
+
+    return g_defaultImage;
+}
+
+ThorQ::Api::Image::Image(const QString& id, ThorQ::Api::Client* apiClient)
     : ThorQ::Api::ApiObject(apiClient)
-    , m_id("default")
-    , m_type(ThorQ::Api::Image::ImageType::Png)
-    , m_image()
-    , m_animation(new QMovie(this))
+    , m_id(id)
+    , m_resolution()
+    , m_sizeBytes()
+    , m_fileType()
+    , m_uploadedAt()
 {
-    QObject::connect(this, &ThorQ::Api::Image::idChanged, this, &ThorQ::Api::Image::update);
-    QObject::connect(this, &ThorQ::Api::Image::typeChanged, this, &ThorQ::Api::Image::loadData);
-    loadData();
 }
-ThorQ::Api::Image::Image(ThorQ::Api::ApiObject* apiObject)
+ThorQ::Api::Image::Image(const QString& id, ThorQ::Api::ApiObject* apiObject)
     : ThorQ::Api::ApiObject(apiObject)
-    , m_id("default")
-    , m_type(ThorQ::Api::Image::ImageType::Png)
-    , m_image()
-    , m_animation(new QMovie(this))
+    , m_id(id)
+    , m_resolution()
+    , m_sizeBytes()
+    , m_fileType()
+    , m_uploadedAt()
 {
-    QObject::connect(this, &ThorQ::Api::Image::idChanged, this, &ThorQ::Api::Image::update);
-    QObject::connect(this, &ThorQ::Api::Image::typeChanged, this, &ThorQ::Api::Image::loadData);
-    loadData();
 }
 
-QStringView ThorQ::Api::Image::id() const
+QString ThorQ::Api::Image::id() const
 {
     return m_id;
 }
 
-ThorQ::Api::Image::ImageType ThorQ::Api::Image::type() const
+QSize ThorQ::Api::Image::resolution() const
 {
-    return m_type;
+    return m_resolution;
 }
 
-QPixmap ThorQ::Api::Image::image() const
+std::size_t ThorQ::Api::Image::sizeBytes() const
 {
-    return m_image;
+    return m_sizeBytes;
 }
 
-QMovie* ThorQ::Api::Image::animation() const
+ThorQ::FileType ThorQ::Api::Image::fileType() const
 {
-    return m_animation;
+    return m_fileType;
+}
+
+QDateTime ThorQ::Api::Image::uploadedAt() const
+{
+    return m_uploadedAt;
+}
+
+QString ThorQ::Api::Image::cacheLocation() const
+{
+    return m_cacheLocation;
 }
 
 void ThorQ::Api::Image::update()
 {
-    if (QPixmapCache::find(m_id, &m_image)) {
-        emit imageLoaded(m_image);
-        return;
-    }
-
     QNetworkReply* reply = apiClient()->requestGet(apiClient()->createApiRequest(QUrl("img/" + m_id)));
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
 
@@ -69,111 +90,86 @@ void ThorQ::Api::Image::update()
         auto json = QJsonDocument::fromJson(reply->readAll(), &err).object();
         if (err.error != QJsonParseError::NoError) {
             qDebug().noquote() << "Failed to parse image:" << err.errorString();
-            setNotFound(); // TODO: errorImage
             return;
         }
 
         // If we got a error response, display it
         if (json["ok"].toBool(true) == false) {
             qDebug().noquote() << "Failed to fetch image:" << json["msg"].toString();
-            setNotFound();
             return;
         }
 
         // Get json values
+        QSize resolution(json["width"].toInt(), json["height"].toInt());
+        int sizeBytes = json["bsize"].toInt();
         QString mime = json["mime"].toString();
+        QDateTime uploadedAt = QDateTime::fromString(json["uplaoded_at"].toString(), Qt::ISODate);
 
         // Parse mime type
         QMimeType imgMime = QMimeDatabase().mimeTypeForName(mime);
         if (mime.isEmpty() || !imgMime.isValid()) {
             qDebug().noquote() << "Failed to parse mime:" << mime;
-            setNotFound(); // TODO: errorImage
             return;
         }
 
         // Get image type
         QString ext = imgMime.preferredSuffix();
+        ThorQ::FileType fileType;
         if (ext == "png") {
-            setType(ThorQ::Api::Image::ImageType::Png, true);
+            fileType = ThorQ::FileType::Png;
         } else if (ext == "jpg") {
-            setType(ThorQ::Api::Image::ImageType::Jpg, true);
+            fileType = ThorQ::FileType::Jpg;
         } else if (ext == "gif") {
-            setType(ThorQ::Api::Image::ImageType::Gif, true);
+            fileType = ThorQ::FileType::Gif;
         } else {
-            qDebug().noquote() << "Invalid image extension:" << ext;
-            setNotFound(); // TODO: errorImage
+            qDebug().noquote() << "Invalid image file extension:" << ext << "from mime:" << mime;
             return;
         }
+
+        setResolution(resolution);
+        setSizeBytes(sizeBytes);
+        setFileType(fileType);
+        setUploadedAt(uploadedAt);
+        setCacheLocation(ThorQ::PathUtils::GetConfigDirectory("images").filePath(m_id));
     });
 }
 
-void ThorQ::Api::Image::setId(const QString& id)
+void ThorQ::Api::Image::setResolution(QSize resolution)
 {
-    if (m_id != id) {
-        m_id = id;
-        emit idChanged(id);
+    if (m_resolution != resolution) {
+        m_resolution = resolution;
+        emit resolutionChanged(resolution);
     }
 }
 
-void ThorQ::Api::Image::setType(ThorQ::Api::Image::ImageType type, bool forceUpdate)
+void ThorQ::Api::Image::setSizeBytes(std::size_t sizeBytes)
 {
-    if (m_type != type || forceUpdate) {
-        m_type = type;
-        emit typeChanged(type);
+    if (m_sizeBytes != sizeBytes) {
+        m_sizeBytes = sizeBytes;
+        emit sizeBytesChanged(sizeBytes);
     }
 }
 
-void ThorQ::Api::Image::loadData()
+void ThorQ::Api::Image::setFileType(ThorQ::FileType fileType)
 {
-    const char* ext;
-    switch (m_type) {
-    case ThorQ::Api::Image::ImageType::Png:
-        ext = ".png";
-        break;
-    case ThorQ::Api::Image::ImageType::Jpg:
-        ext = ".jpg";
-        break;
-    case ThorQ::Api::Image::ImageType::Gif:
-        ext = ".gif";
-        break;
-    default:
-        setDefault();
-        return;
+    if (m_fileType != fileType) {
+        m_fileType = fileType;
+        emit fileTypeChanged(fileType);
     }
-
-    QNetworkReply* reply = apiClient()->requestGet(QNetworkRequest(QUrl(THORQ_SERVER_FILE_ENDPOINT + m_id + ext)));
-    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
-        QByteArray data = reply->readAll();
-
-        // Load actual image data
-        if (m_type == ThorQ::Api::Image::ImageType::Gif) {
-            // Animation
-            QBuffer buffer(&data); // TODO: THIS IS BAD, "data" WILL GO OUT OF SCOPE, AND "buffer" WILL BE MEMORY LEAKED
-            buffer.open(QIODevice::ReadOnly);
-            m_animation->setFormat("GIF");
-            m_animation->setDevice(&buffer);
-            m_animation->start();
-        } else {
-            // Image
-            if (m_image.loadFromData(data)) {
-                emit imageLoaded(m_image);
-            } else {
-                setNotFound(); // TODO: errorImage
-            }
-        }
-
-
-    });
 }
 
-void ThorQ::Api::Image::setDefault()
+void ThorQ::Api::Image::setUploadedAt(const QDateTime& uploadedAt)
 {
-    m_id = "default";
-    setType(ThorQ::Api::Image::ImageType::Png, true);
+    if (m_uploadedAt != uploadedAt) {
+        m_uploadedAt = uploadedAt;
+        emit uploadedAtChanged(uploadedAt);
+    }
 }
 
-void ThorQ::Api::Image::setNotFound()
+void ThorQ::Api::Image::setCacheLocation(const QString& cacheLocation)
 {
-    m_id = "not_found";
-    setType(ThorQ::Api::Image::ImageType::Png, true);
+    if (m_cacheLocation != cacheLocation) {
+        m_cacheLocation = cacheLocation;
+        emit cacheLocationChanged(cacheLocation);
+    }
 }

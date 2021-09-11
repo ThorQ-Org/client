@@ -1,5 +1,5 @@
-#ifndef P2PCLIENT_H
-#define P2PCLIENT_H
+#ifndef THORQ_P2PCLIENT_H
+#define THORQ_P2PCLIENT_H
 
 #include <QObject>
 
@@ -11,4 +11,4 @@ public:
     P2PClient(QObject* parent = nullptr);
 };
 
-#endif // P2PCLIENT_H
+#endif // THORQ_P2PCLIENT_H

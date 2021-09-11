@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef THORQ_MAINWINDOW_H
+#define THORQ_MAINWINDOW_H
 
 #include <QWidget>
 #include <QRect>
@@ -11,6 +11,8 @@ class QGraphicsScene;
 
 namespace ThorQ::UI {
 
+class WindowGeometrySaver;
+
 class MainWindow : public QWidget
 {
 	Q_OBJECT
@@ -18,17 +20,14 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow() = default;
-private slots:
-    void saveWindowState();
 private:
-    QTimer* m_settingsTimer;
     QVBoxLayout* m_vlayout;
     QHBoxLayout* m_hlayout;
+    ThorQ::UI::WindowGeometrySaver* m_geometrySaver;
 
     QGraphicsScene* m_userScene;
-    QRect m_lastGeometry;
 };
 
 }
 
-#endif // MAINWINDOW_H
+#endif // THORQ_MAINWINDOW_H

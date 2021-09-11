@@ -1,5 +1,5 @@
-#ifndef OVRLAUNCHMANAGER_H
-#define OVRLAUNCHMANAGER_H
+#ifndef THORQ_OVRLAUNCHMANAGER_H
+#define THORQ_OVRLAUNCHMANAGER_H
 
 
 class OVRLaunchManager
@@ -8,4 +8,4 @@ public:
     OVRLaunchManager();
 };
 
-#endif // OVRLAUNCHMANAGER_H
+#endif // THORQ_OVRLAUNCHMANAGER_H

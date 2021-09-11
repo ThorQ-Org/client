@@ -4,7 +4,7 @@ QWidget {
     padding: 0px, 0px, 0px, 0px;
 }
 
-NamedLineEdit {
+ThorQ--UI--NamedLineEdit {
     font-family: 'Calibri';
 }
 
@@ -36,7 +36,7 @@ QLineEdit {
     font-weight: normal;
 }
 
-ErrorLabel {
+ThorQ--UI--ErrorLabel {
     height: 10px;
     margin-top: 4px;
 

@@ -1,5 +1,5 @@
-#ifndef OVROVERLAY_H
-#define OVROVERLAY_H
+#ifndef THORQ_OVROVERLAY_H
+#define THORQ_OVROVERLAY_H
 
 #include <QMatrix4x4>
 
@@ -63,4 +63,4 @@ private:
 };
 }
 
-#endif // OVROVERLAY_H
+#endif // THORQ_OVROVERLAY_H

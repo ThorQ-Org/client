@@ -1,5 +1,5 @@
-#ifndef PASSWORDHASH_H
-#define PASSWORDHASH_H
+#ifndef THORQ_PASSWORDHASH_H
+#define THORQ_PASSWORDHASH_H
 
 #include <QObject>
 #include <QByteArray>
@@ -87,4 +87,4 @@ private:
 
 }
 
-#endif // PASSWORDHASH_H
+#endif // THORQ_PASSWORDHASH_H

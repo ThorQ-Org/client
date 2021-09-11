@@ -1,13 +1,16 @@
-#ifndef LOGINWINDOW_H
-#define LOGINWINDOW_H
+#ifndef THORQ_LOGINWINDOW_H
+#define THORQ_LOGINWINDOW_H
 
 #include <QWidget>
+
+class QTabWidget;
 
 namespace ThorQ::UI {
 
 class LoginWidget;
 class RegisterWidget;
 class RecoverWidget;
+class WindowPositionSaver;
 
 class LoginWindow : public QWidget
 {
@@ -15,17 +18,14 @@ class LoginWindow : public QWidget
     Q_DISABLE_COPY(LoginWindow)
 public:
     LoginWindow(QWidget* parent = nullptr);
-private slots:
-    void saveWindowState();
 private:
-    QTimer* m_settingsTimer;
+    QTabWidget* m_tabWidget;
     ThorQ::UI::LoginWidget* m_loginWidget;
     ThorQ::UI::RegisterWidget* m_registerWidget;
     ThorQ::UI::RecoverWidget* m_recoverWidget;
-
-    QPoint m_lastPosition;
+    ThorQ::UI::WindowPositionSaver* m_positionSaver;
 };
 
 }
 
-#endif // LOGINWINDOW_H
+#endif // THORQ_LOGINWINDOW_H

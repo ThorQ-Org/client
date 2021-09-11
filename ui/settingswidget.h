@@ -1,5 +1,5 @@
-#ifndef SETTINGSWIDGET_H
-#define SETTINGSWIDGET_H
+#ifndef THORQ_SETTINGSWIDGET_H
+#define THORQ_SETTINGSWIDGET_H
 
 #include <QWidget>
 
@@ -23,4 +23,4 @@ private:
 
 }
 
-#endif // SETTINGSWIDGET_H
+#endif // THORQ_SETTINGSWIDGET_H

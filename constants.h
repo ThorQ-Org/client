@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef THORQ_CONSTANTS_H
+#define THORQ_CONSTANTS_H
 
 #include <cstddef>
 #include <cstdint>
@@ -44,4 +44,4 @@ constexpr int DISCORDID_LEN_MAX = 37; ///< Maximum id length (32 chars + "#xxxx"
 
 }
 
-#endif // CONSTANTS_H
+#endif // THORQ_CONSTANTS_H

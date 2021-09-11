@@ -11,7 +11,7 @@
 #include <cstdlib>
 #endif
 
-bool ThorQ::SysUtils::ProcessIsRuning(const char* processName)
+bool ThorQ::SysUtils::IsProcessRuning(const char* processName)
 {
 #ifdef _WIN32
     const char* p = strrchr(processName, '\\');

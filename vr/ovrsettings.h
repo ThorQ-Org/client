@@ -1,5 +1,5 @@
-#ifndef OVRSETTINGS_H
-#define OVRSETTINGS_H
+#ifndef THORQ_OVRSETTINGS_H
+#define THORQ_OVRSETTINGS_H
 
 #include "openvr.h"
 
@@ -7,4 +7,4 @@ namespace ThorQ::VR::OVRSettings {
 bool AllowGlobalActionSetPriority(bool allow);
 }
 
-#endif // OVRSETTINGS_H
+#endif // THORQ_OVRSETTINGS_H

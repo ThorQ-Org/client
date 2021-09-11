@@ -1,10 +1,10 @@
-#ifndef SYSUTILS_H
-#define SYSUTILS_H
+#ifndef THORQ_SYSUTILS_H
+#define THORQ_SYSUTILS_H
 
 namespace ThorQ::SysUtils {
 
-bool ProcessIsRuning(const char* processName);
+bool IsProcessRuning(const char* processName);
 
 }
 
-#endif // SYSUTILS_H
+#endif // THORQ_SYSUTILS_H

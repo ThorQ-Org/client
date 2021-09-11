@@ -1,5 +1,5 @@
-#ifndef REALTIMECLIENT_H
-#define REALTIMECLIENT_H
+#ifndef THORQ_REALTIMECLIENT_H
+#define THORQ_REALTIMECLIENT_H
 
 #include <QObject>
 
@@ -11,4 +11,4 @@ public:
     RealtimeClient(QObject* parent = nullptr);
 };
 
-#endif // REALTIMECLIENT_H
+#endif // THORQ_REALTIMECLIENT_H

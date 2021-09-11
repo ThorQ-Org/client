@@ -1,5 +1,5 @@
-#ifndef PERSISTENTCOOKIEJAR_H
-#define PERSISTENTCOOKIEJAR_H
+#ifndef THORQ_PERSISTENTCOOKIEJAR_H
+#define THORQ_PERSISTENTCOOKIEJAR_H
 
 #include <QObject>
 #include <QNetworkCookieJar>
@@ -26,4 +26,4 @@ private:
 
 }
 
-#endif // PERSISTENTCOOKIEJAR_H
+#endif // THORQ_PERSISTENTCOOKIEJAR_H

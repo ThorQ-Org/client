@@ -1,5 +1,5 @@
-#ifndef SERIAL_H
-#define SERIAL_H
+#ifndef THORQ_SERIAL_H
+#define THORQ_SERIAL_H
 
 #include <QObject>
 
@@ -28,4 +28,4 @@ private:
     QSerialPort* m_serial;
 };
 
-#endif // SERIAL_H
+#endif // THORQ_SERIAL_H

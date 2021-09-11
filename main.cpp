@@ -11,6 +11,9 @@
 #include <QIcon>
 #include <QDir>
 
+#include <QLabel>
+#include "api/image.h"
+
 int main(int argc, char** argv)
 {
     QCoreApplication::addLibraryPath(QDir::currentPath().append("/libs/"));
@@ -33,7 +36,6 @@ int main(int argc, char** argv)
     ThorQ::UI::WindowController* windowController = new ThorQ::UI::WindowController(apiClient);
 
     apiClient->getHealth();
-    apiClient->config()->update();
 
     return app.exec();
 }

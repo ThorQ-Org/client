@@ -1,5 +1,5 @@
-#ifndef APIUSER_H
-#define APIUSER_H
+#ifndef THORQ_APIUSER_H
+#define THORQ_APIUSER_H
 
 #include "apiobject.h"
 
@@ -26,11 +26,13 @@ public:
     QString statusText() const;
 signals:
     void usernameChanged(const QString& username);
+    void profilePictureChanged(ThorQ::Api::Image* profilePicture);
     void statusOnlineChanged(int online);
     void statusTextChanged(const QString& text);
 public slots:
     void update() override;
     void setUsername(const QString& username);
+    void setProfilePicture(ThorQ::Api::Image* profilePicture);
     void setStatusOnline(int online);
     void setStatusText(const QString& text);
 protected:
@@ -43,4 +45,4 @@ protected:
 
 }
 
-#endif // APIUSER_H
+#endif // THORQ_APIUSER_H

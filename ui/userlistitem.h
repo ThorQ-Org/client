@@ -1,5 +1,5 @@
-#ifndef USERLISTITEM_H
-#define USERLISTITEM_H
+#ifndef THORQ_USERLISTITEM_H
+#define THORQ_USERLISTITEM_H
 
 #include <QGraphicsItem>
 
@@ -26,4 +26,4 @@ private:
 
 }
 
-#endif // USERLISTITEM_H
+#endif // THORQ_USERLISTITEM_H

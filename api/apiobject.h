@@ -1,5 +1,5 @@
-#ifndef APICONSUMER_H
-#define APICONSUMER_H
+#ifndef THORQ_APIOBJECT_H
+#define THORQ_APIOBJECT_H
 
 #include <QObject>
 
@@ -30,4 +30,4 @@ private:
 
 }
 
-#endif // APICONSUMER_H
+#endif // THORQ_APIOBJECT_H

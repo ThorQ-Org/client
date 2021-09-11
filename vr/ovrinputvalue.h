@@ -1,5 +1,5 @@
-#ifndef OVRINPUTSOURCE_H
-#define OVRINPUTSOURCE_H
+#ifndef THORQ_OVRINPUTSOURCE_H
+#define THORQ_OVRINPUTSOURCE_H
 
 #include "openvr.h"
 #include "ovrtrackeddevice.h"
@@ -43,4 +43,4 @@ private:
 };
 }
 
-#endif // OVRINPUTSOURCE_H
+#endif // THORQ_OVRINPUTSOURCE_H

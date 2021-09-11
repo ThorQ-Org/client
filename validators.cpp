@@ -2,16 +2,14 @@
 
 #include "constants.h"
 
-#include <QRegExp>
-
 ThorQ::Validators::RetType ThorQ::Validators::UsernameValidator(ThorQ::Validators::ArgType username)
 {
     if (username.length() < ThorQ::USERNAME_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Too long username");
+        return ThorQ::Validators::RetType(false, "Too short username");
     }
 
-    if (username.length() < ThorQ::USERNAME_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Too short username");
+    if (username.length() > ThorQ::USERNAME_LEN_MAX) {
+        return ThorQ::Validators::RetType(false, "Too long username");
     }
 
     return ThorQ::Validators::DefaultValue;
@@ -20,11 +18,11 @@ ThorQ::Validators::RetType ThorQ::Validators::UsernameValidator(ThorQ::Validator
 ThorQ::Validators::RetType ThorQ::Validators::PasswordValidator(ThorQ::Validators::ArgType password)
 {
     if (password.length() < ThorQ::PASSWORD_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Too long password");
+        return ThorQ::Validators::RetType(false, "Too short password");
     }
 
-    if (password.length() < ThorQ::PASSWORD_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Too short password");
+    if (password.length() > ThorQ::PASSWORD_LEN_MAX) {
+        return ThorQ::Validators::RetType(false, "Too long password");
     }
 
     return ThorQ::Validators::DefaultValue;
@@ -106,21 +104,21 @@ ThorQ::Validators::RetType ThorQ::Validators::EmailValidator(ThorQ::Validators::
     const QChar* it = begin;
 
     // Check email size
+    if (email.length() < ThorQ::EMAIL_LEN_MIN) {
+        return ThorQ::Validators::RetType(false, "Too short email");
+    }
     if (email.length() > ThorQ::EMAIL_LEN_MAX) {
         return ThorQ::Validators::RetType(false, "Too long email");
-    }
-    if (email.length() < ThorQ::EMAIL_LEN_MIN) {
-        return ThorQ::Validators::RetType(false, "Invalid email");
     }
 
     // Verify that email recepient section is valid
     if (!IsValidLocalPart(it)) {
-        return ThorQ::Validators::RetType(false, "Email user name invalid");
+        return ThorQ::Validators::RetType(false, "Invalid email (local part)");
     }
 
     // Validate domain validity
     if (!IsValidDomainPart(it)) {
-        return ThorQ::Validators::RetType(false, "Email domain name invalid");
+        return ThorQ::Validators::RetType(false, "Invalid email (domain part)");
     }
 
     // Check that the entire email has been checked

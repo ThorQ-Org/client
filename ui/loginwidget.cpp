@@ -23,6 +23,8 @@ ThorQ::UI::LoginWidget::LoginWidget(QWidget* parent)
     m_title->setText(THORQ_APPLICATION_NAME);
     m_title->setStyleSheet("font-size: 72px; color: #FFFFFF");
 
+    setOnlineStatus("Offline", QColor::fromRgb(255, 0, 0));
+
     m_usernameInput->setName(tr("USERNAME"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_usernameInput->setSimpleText(true);

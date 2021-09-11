@@ -1,5 +1,5 @@
-#ifndef RECOVERWIDGET_H
-#define RECOVERWIDGET_H
+#ifndef THORQ_RECOVERWIDGET_H
+#define THORQ_RECOVERWIDGET_H
 
 #include <QWidget>
 
@@ -38,4 +38,4 @@ private:
 
 }
 
-#endif // RECOVERWIDGET_H
+#endif // THORQ_RECOVERWIDGET_H
