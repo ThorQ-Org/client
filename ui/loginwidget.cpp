@@ -25,12 +25,12 @@ ThorQ::UI::LoginWidget::LoginWidget(QWidget* parent)
 
     setOnlineStatus("Offline", QColor::fromRgb(255, 0, 0));
 
-    m_usernameInput->setName(tr("USERNAME"));
+    m_usernameInput->setName(tr("Username"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_usernameInput->setSimpleText(true);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
 
-    m_passwordInput->setName(tr("PASSWORD"));
+    m_passwordInput->setName(tr("Password"));
     m_passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
 

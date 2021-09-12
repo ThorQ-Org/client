@@ -11,6 +11,7 @@ namespace ThorQ::UI {
 class ErrorLabel : public QLabel
 {
     Q_OBJECT
+    Q_DISABLE_COPY(ErrorLabel)
 public:
     explicit ErrorLabel(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     explicit ErrorLabel(const QString& text, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());;

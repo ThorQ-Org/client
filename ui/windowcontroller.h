@@ -10,6 +10,8 @@ class MainWindow;
 
 class WindowController : public QObject
 {
+    Q_OBJECT
+    Q_DISABLE_COPY(WindowController)
 public:
     WindowController(QObject* parent = nullptr);
 private:

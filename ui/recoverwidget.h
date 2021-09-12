@@ -13,27 +13,24 @@ class NamedLineEdit;
 class RecoverWidget : public QWidget
 {
      Q_OBJECT
+    Q_DISABLE_COPY(RecoverWidget)
 public:
     RecoverWidget(QWidget* parent = nullptr);
     ~RecoverWidget();
 signals:
     void emailChanged(const QString& email);
-    void goBackClicked();
     void recoverClicked();
 public slots:
     void invalidateEmail(const QString& reason);
     void clearForms();
 private slots:
-    void handleGoBackClicked();
-    void handleRecoverClicked();
     void handleEmailInputChanged();
+    void handleRecoverClicked();
 private:
-    QPushButton* m_goBackButton;
+    QVBoxLayout* m_layout;
 
     NamedLineEdit* m_emailInput;
     QPushButton* m_recoverButton;
-
-    QVBoxLayout* m_layout;
 };
 
 }

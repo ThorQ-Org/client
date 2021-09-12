@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 
+#include "controllers/windowgeometrysaver.h"
 #include "constants.h"
-#include "windowgeometrysaver.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -16,7 +16,7 @@ ThorQ::UI::MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
     , m_vlayout(new QVBoxLayout(this))
     , m_hlayout(new QHBoxLayout())
-    , m_geometrySaver(new ThorQ::UI::WindowGeometrySaver("WindowMainGeometry", this))
+    , m_geometrySaver(new ThorQ::Controllers::WindowGeometrySaver("WindowMainGeometry", this))
     , m_userScene(new QGraphicsScene(this))
 {
     // Set window title and geometry

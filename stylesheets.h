@@ -5,7 +5,7 @@
 
 namespace ThorQ {
 namespace StyleSheets {
-QString tryGetStylesheet(QString styleSheetName);
+QString TryGetStylesheet(QString styleSheetName);
 }
 }
 

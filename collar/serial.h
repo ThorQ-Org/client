@@ -8,6 +8,7 @@ class QSerialPort;
 class CollarSerial : public QObject
 {
 	Q_OBJECT
+    Q_DISABLE_COPY(CollarSerial)
 public:
     CollarSerial(QObject* parent = nullptr);
 

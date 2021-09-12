@@ -8,7 +8,7 @@
 QMutex l_styleSheetCache;
 QMap<QString, QString> g_styleSheetCache;
 
-QString ThorQ::StyleSheets::tryGetStylesheet(QString styleSheetName)
+QString ThorQ::StyleSheets::TryGetStylesheet(QString styleSheetName)
 {
     QMutexLocker locker(&l_styleSheetCache);
 

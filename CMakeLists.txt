@@ -152,8 +152,6 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/recoverwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/errorlabel.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/namedlineedit.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowgeometrysaver.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowpositionsaver.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrlaunchmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovraction.cpp
@@ -163,6 +161,10 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrinputvalue.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrtrackeddevice.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowgeometrysaver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowpositionsaver.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/loginwindowcontroller.cpp
 )
 set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/filetype.h
@@ -200,8 +202,6 @@ set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/recoverwidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/errorlabel.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/namedlineedit.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowgeometrysaver.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowpositionsaver.h
 
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrlaunchmanager.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrhelpers.h
@@ -212,6 +212,10 @@ set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrinputvalue.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrtrackeddevice.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowgeometrysaver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowpositionsaver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/loginwindowcontroller.h
 )
 set (${project}_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources.qrc)
 

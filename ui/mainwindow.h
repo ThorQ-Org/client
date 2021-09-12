@@ -9,9 +9,15 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGraphicsScene;
 
-namespace ThorQ::UI {
+namespace ThorQ {
+
+namespace Controllers {
 
 class WindowGeometrySaver;
+
+}
+
+namespace UI {
 
 class MainWindow : public QWidget
 {
@@ -23,11 +29,12 @@ public:
 private:
     QVBoxLayout* m_vlayout;
     QHBoxLayout* m_hlayout;
-    ThorQ::UI::WindowGeometrySaver* m_geometrySaver;
+    ThorQ::Controllers::WindowGeometrySaver* m_geometrySaver;
 
     QGraphicsScene* m_userScene;
 };
 
+}
 }
 
 #endif // THORQ_MAINWINDOW_H

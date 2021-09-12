@@ -13,7 +13,7 @@ class ControlWidget;
 class OverlayWidget : public QWidget
 {
 	Q_OBJECT
-
+    Q_DISABLE_COPY(OverlayWidget)
 public:
     /**
      * @brief OverlayWidget

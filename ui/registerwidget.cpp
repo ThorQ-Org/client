@@ -10,7 +10,6 @@
 
 ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     : QWidget(parent)
-    , m_goBackButton(new QPushButton(this))
     , m_usernameInput(new NamedLineEdit(this))
     , m_emailInput(new NamedLineEdit(this))
     , m_passwordInput(new NamedLineEdit(this))
@@ -18,11 +17,6 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     , m_registerButton(new QPushButton(this))
     , m_layout(new QVBoxLayout(this))
 {
-    // Go back button
-    m_goBackButton->setText(tr("Go back"));
-    m_goBackButton->setCursor(Qt::PointingHandCursor);
-    QObject::connect(m_goBackButton, &QPushButton::clicked, this, &ThorQ::UI::RegisterWidget::handleGoBackClicked);
-
     // Register button
     m_registerButton->setText(tr("Register"));
     m_registerButton->setCursor(Qt::PointingHandCursor);
@@ -30,7 +24,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     QObject::connect(m_registerButton, &QPushButton::clicked, this, &ThorQ::UI::RegisterWidget::handleRegisterClicked);
 
     // Username input
-    m_usernameInput->setName(tr("USERNAME"));
+    m_usernameInput->setName(tr("Username"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_usernameInput->setSimpleText(true);
     m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -39,7 +33,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleUsernameInputChanged);
 
     // Email input
-    m_emailInput->setName(tr("EMAIL"));
+    m_emailInput->setName(tr("Email"));
     m_emailInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_emailInput->setSimpleText(true);
     m_emailInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -48,7 +42,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleEmailInputChanged);
 
     // Password input
-    m_passwordInput->setName(tr("PASSWORD"));
+    m_passwordInput->setName(tr("Password"));
     m_passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
     m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
@@ -56,7 +50,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
 
     // Confirm password input
-    m_confirmPasswordInput->setName(tr("CONFIRM PASSWORD"));
+    m_confirmPasswordInput->setName(tr("Confirm Password"));
     m_confirmPasswordInput->setEchoMode(QLineEdit::EchoMode::Password);
     m_confirmPasswordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::hideError);
@@ -64,7 +58,6 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
 
     // Layout
     m_layout->setContentsMargins(12, 12, 12, 12);
-    m_layout->addWidget(m_goBackButton);
     m_layout->addWidget(m_usernameInput);
     m_layout->addWidget(m_emailInput);
     m_layout->addWidget(m_passwordInput);
@@ -103,11 +96,6 @@ void ThorQ::UI::RegisterWidget::clearPassword()
 {
     m_passwordInput->clearText();
     m_confirmPasswordInput->clearText();
-}
-
-void ThorQ::UI::RegisterWidget::handleGoBackClicked()
-{
-    emit goBackClicked();
 }
 
 void ThorQ::UI::RegisterWidget::handleRegisterClicked()

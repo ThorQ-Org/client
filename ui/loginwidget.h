@@ -15,6 +15,7 @@ class NamedLineEdit;
 class LoginWidget : public QWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(LoginWidget)
 public:
     LoginWidget(QWidget* parent = nullptr);
     ~LoginWidget();

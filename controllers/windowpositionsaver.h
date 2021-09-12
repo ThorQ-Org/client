@@ -9,7 +9,7 @@ class QTimer;
 class QWidget;
 class QSettings;
 
-namespace ThorQ::UI {
+namespace ThorQ::Controllers {
 
 class WindowPositionSaver : public QObject
 {

@@ -13,6 +13,7 @@ namespace ThorQ::UI {
 
 class UserListItem : public QGraphicsItem
 {
+    Q_DISABLE_COPY(UserListItem)
 public:
 	UserListItem(const QString& username, QGraphicsItem* parent = nullptr);
 private:

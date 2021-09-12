@@ -17,8 +17,16 @@ ThorQ::UI::NamedLineEdit::NamedLineEdit(QWidget* parent)
     , m_lastValueLength(0)
     , m_lastValueHash()
 {
-    setStyleSheet(ThorQ::StyleSheets::tryGetStylesheet("namedlineedit"));
+    setStyleSheet(ThorQ::StyleSheets::TryGetStylesheet("namedlineedit"));
 
+    // Title label
+    m_labelTitle->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
+    // Input line edit
+    m_lineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    // Error label
+    m_labelError->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_labelError->hide();
 
     m_layout->setAlignment(Qt::AlignVCenter);
@@ -26,7 +34,6 @@ ThorQ::UI::NamedLineEdit::NamedLineEdit(QWidget* parent)
     m_layout->addWidget(m_lineEdit);
     m_layout->addWidget(m_labelError);
     m_layout->setSpacing(0);
-    setLayout(m_layout);
 
     QObject::connect(m_lineEdit, &QLineEdit::editingFinished, this, &ThorQ::UI::NamedLineEdit::handleEditingFinished);
 }

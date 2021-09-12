@@ -1,4 +1,4 @@
-#include "windowgeometrysaver.h"
+#include "windowpositionsaver.h"
 
 #include <QStyle>
 #include <QTimer>
@@ -7,9 +7,9 @@
 #include <QSettings>
 #include <QApplication>
 
-ThorQ::UI::WindowGeometrySaver::WindowGeometrySaver(QString settingName, QWidget* targetWidget)
+ThorQ::Controllers::WindowPositionSaver::WindowPositionSaver(QString settingName, QSize fixedSize, QWidget* targetWidget)
     : QObject(targetWidget)
-    , m_lastRect()
+    , m_lastPos()
     , m_settingName(settingName)
     , m_updateTimer(new QTimer(this))
     , m_targetWidget(targetWidget)
@@ -20,11 +20,11 @@ ThorQ::UI::WindowGeometrySaver::WindowGeometrySaver(QString settingName, QWidget
     QVariant positionValue = settings.value(settingName);
 
     // Set screen and position if the settings are valid
-    QRect windowRect;
+    QPoint windowPos;
     QScreen* windowScreen = nullptr;
-    if (positionValue.type() == QVariant::Rect) {
-        windowRect = positionValue.toRect();
-        windowScreen = QApplication::screenAt(windowRect.topLeft());
+    if (positionValue.type() == QVariant::Point) {
+        windowPos = positionValue.toPoint();
+        windowScreen = QApplication::screenAt(windowPos);
     }
 
     // Check if position is offscreen, and if so reset it
@@ -33,38 +33,39 @@ ThorQ::UI::WindowGeometrySaver::WindowGeometrySaver(QString settingName, QWidget
         windowScreen = QApplication::primaryScreen();
 
         // Default position
-        windowRect = QStyle::alignedRect(
+        windowPos = QStyle::alignedRect(
                 Qt::LeftToRight,
                 Qt::AlignCenter,
-                windowScreen->size() / 2,
+                fixedSize,
                 windowScreen->availableGeometry()
-            );
+            ).topLeft();
 
         // Save updated position to settings
-        settings.setValue(settingName, windowRect);
+        settings.setValue(settingName, windowPos);
     }
 
     // Set initial position
-    m_lastRect = windowRect;
+    m_lastPos = windowPos;
 
-    m_targetWidget->setGeometry(windowRect);
+    m_targetWidget->setFixedSize(fixedSize);
+    m_targetWidget->move(windowPos);
 
     m_updateTimer->setSingleShot(false);
     m_updateTimer->setInterval(1000);
 
-    QObject::connect(m_updateTimer, &QTimer::timeout, this, &ThorQ::UI::WindowGeometrySaver::saveGeometry);
+    QObject::connect(m_updateTimer, &QTimer::timeout, this, &ThorQ::Controllers::WindowPositionSaver::savePosition);
 
     m_updateTimer->start();
 }
 
-void ThorQ::UI::WindowGeometrySaver::saveGeometry()
+void ThorQ::Controllers::WindowPositionSaver::savePosition()
 {
     if (m_targetWidget->isVisible()) {
-        QRect currentRect = m_targetWidget->rect();
+        QPoint currentPos = m_targetWidget->pos();
 
-        if (m_lastRect != currentRect) {
-            m_lastRect = currentRect;
-            m_settings->setValue(m_settingName, currentRect);
+        if (m_lastPos != currentPos) {
+            m_lastPos = currentPos;
+            m_settings->setValue(m_settingName, currentPos);
         }
     }
 }

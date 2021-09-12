@@ -25,7 +25,7 @@ int main(int argc, char** argv)
     QCoreApplication::setOrganizationDomain(THORQ_ORGANIZATION_DOMAIN);
 
     QApplication app(argc, argv);
-    app.setStyleSheet(ThorQ::StyleSheets::tryGetStylesheet("main"));
+    app.setStyleSheet(ThorQ::StyleSheets::TryGetStylesheet("main"));
     app.setDesktopFileName(THORQ_APPLICATION_NAME);
     app.setWindowIcon(QIcon(":/shockGrey.ico"));
     app.setQuitOnLastWindowClosed(false);

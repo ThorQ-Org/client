@@ -13,6 +13,7 @@ class NamedLineEdit;
 class RegisterWidget : public QWidget
 {
     Q_OBJECT
+    Q_DISABLE_COPY(RegisterWidget)
 public:
     RegisterWidget(QWidget *parent = nullptr);
     ~RegisterWidget();
@@ -20,7 +21,6 @@ signals:
     void usernameChanged(const QString& email);
     void emailChanged(const QString& email);
     void passwordChanged(const QString& email);
-    void goBackClicked();
     void registerClicked();
 public slots:
     void invalidateUsername(const QString& reason);
@@ -29,14 +29,11 @@ public slots:
     void clearForms();
     void clearPassword();
 private slots:
-    void handleGoBackClicked();
     void handleRegisterClicked();
     void handleUsernameInputChanged();
     void handleEmailInputChanged();
     void handlePasswordInputChanged();
 private:
-    QPushButton* m_goBackButton;
-
     NamedLineEdit* m_usernameInput;
     NamedLineEdit* m_emailInput;
     NamedLineEdit* m_passwordInput;
