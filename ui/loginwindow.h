@@ -1,9 +1,8 @@
 #ifndef THORQ_LOGINWINDOW_H
 #define THORQ_LOGINWINDOW_H
 
+#include <QTabWidget>
 #include <QWidget>
-
-class QTabWidget;
 
 namespace ThorQ {
 
@@ -19,7 +18,7 @@ class LoginWidget;
 class RegisterWidget;
 class RecoverWidget;
 
-class LoginWindow : public QWidget
+class LoginWindow : public QTabWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(LoginWindow)
@@ -30,7 +29,6 @@ public:
     ThorQ::UI::RegisterWidget* registerWidget() const;
     ThorQ::UI::RecoverWidget* recoverWidget() const;
 private:
-    QTabWidget* m_tabWidget;
     ThorQ::UI::LoginWidget* m_loginWidget;
     ThorQ::UI::RegisterWidget* m_registerWidget;
     ThorQ::UI::RecoverWidget* m_recoverWidget;

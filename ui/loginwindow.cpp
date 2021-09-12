@@ -17,8 +17,7 @@
 #include <QTimer>
 
 ThorQ::UI::LoginWindow::LoginWindow(QWidget* parent)
-    : QWidget(parent)
-    , m_tabWidget(new QTabWidget(this))
+    : QTabWidget(parent)
     , m_loginWidget(new ThorQ::UI::LoginWidget(this))
     , m_registerWidget(new ThorQ::UI::RegisterWidget(this))
     , m_recoverWidget(new ThorQ::UI::RecoverWidget(this))
@@ -32,15 +31,15 @@ ThorQ::UI::LoginWindow::LoginWindow(QWidget* parent)
     m_registerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_recoverWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    m_tabWidget->addTab(m_loginWidget, "Login");
-    m_tabWidget->addTab(m_registerWidget, "Register");
-    m_tabWidget->addTab(m_recoverWidget, "Recover");
-    m_tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // Add widgets to tab
+    addTab(m_loginWidget, "Login");
+    addTab(m_registerWidget, "Register");
+    addTab(m_recoverWidget, "Recover");
 
     // Configure tab looks
-    m_tabWidget->setTabPosition(QTabWidget::TabPosition::South);
-    m_tabWidget->tabBar()->setDocumentMode(true);
-    m_tabWidget->tabBar()->setExpanding(true);
+    setTabPosition(QTabWidget::TabPosition::South);
+    tabBar()->setDocumentMode(true);
+    tabBar()->setExpanding(true);
 }
 
 ThorQ::UI::LoginWidget* ThorQ::UI::LoginWindow::loginWidget() const
