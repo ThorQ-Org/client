@@ -3,7 +3,7 @@
 #include "api/client.h"
 #include "api/config.h"
 
-#include "ui/windowcontroller.h"
+#include "controllers/maincontroller.h"
 #include "constants.h"
 
 #include <QApplication>
@@ -30,12 +30,7 @@ int main(int argc, char** argv)
     app.setWindowIcon(QIcon(":/shockGrey.ico"));
     app.setQuitOnLastWindowClosed(false);
 
-    ThorQ::Api::Client::InitializeSingleton(&app);
-    ThorQ::Api::Client* apiClient = ThorQ::Api::Client::Singleton();
-
-    ThorQ::UI::WindowController* windowController = new ThorQ::UI::WindowController(apiClient);
-
-    apiClient->getHealth();
+    ThorQ::Controllers::MainController mainController;
 
     return app.exec();
 }

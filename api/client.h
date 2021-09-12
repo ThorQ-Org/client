@@ -19,7 +19,7 @@ class Client : public QObject
     Q_DISABLE_COPY(Client)
     Client(QObject* parent = nullptr);
 public:
-    static void InitializeSingleton(QObject* parent = nullptr);
+    static ThorQ::Api::Client* InitializeSingleton(QObject* parent = nullptr);
     static ThorQ::Api::Client* Singleton();
 
     ThorQ::Api::Config* config() const;

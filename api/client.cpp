@@ -13,9 +13,10 @@
 #include <QJsonObject>
 
 ThorQ::Api::Client* g_client;
-void ThorQ::Api::Client::InitializeSingleton(QObject* parent)
+ThorQ::Api::Client* ThorQ::Api::Client::InitializeSingleton(QObject* parent)
 {
     g_client = new ThorQ::Api::Client(parent);
+    return g_client;
 }
 
 ThorQ::Api::Client* ThorQ::Api::Client::Singleton()

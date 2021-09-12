@@ -140,7 +140,6 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/api/passwordhash.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/api/friendship.cpp
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowcontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/mainwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/loginwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/userlistitem.cpp
@@ -162,6 +161,7 @@ set (${project}_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrtrackeddevice.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.cpp
 
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/maincontroller.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowgeometrysaver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowpositionsaver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/loginwindowcontroller.cpp
@@ -190,7 +190,6 @@ set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/api/passwordhash.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/friendship.h
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/windowcontroller.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/mainwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/loginwindow.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/userlistitem.h
@@ -213,6 +212,7 @@ set (${project}_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/ovrtrackeddevice.h
     ${CMAKE_CURRENT_SOURCE_DIR}/vr/openvroverlaycontroller.h
 
+    ${CMAKE_CURRENT_SOURCE_DIR}/controllers/maincontroller.h
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowgeometrysaver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/windowpositionsaver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/controllers/loginwindowcontroller.h

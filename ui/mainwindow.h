@@ -26,6 +26,10 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow() = default;
+signals:
+    void windowClosed();
+protected:
+    void closeEvent(QCloseEvent* event) override;
 private:
     QVBoxLayout* m_vlayout;
     QHBoxLayout* m_hlayout;

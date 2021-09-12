@@ -7,13 +7,9 @@
 #include "stylesheets.h"
 #include "constants.h"
 
-#include <QTabWidget>
+#include <QCloseEvent>
 #include <QTabBar>
 #include <QWidget>
-#include <QApplication>
-#include <QSettings>
-#include <QScreen>
-#include <QStyle>
 #include <QTimer>
 
 ThorQ::UI::LoginWindow::LoginWindow(QWidget* parent)
@@ -55,4 +51,13 @@ ThorQ::UI::RegisterWidget* ThorQ::UI::LoginWindow::registerWidget() const
 ThorQ::UI::RecoverWidget* ThorQ::UI::LoginWindow::recoverWidget() const
 {
     return m_recoverWidget;
+}
+
+void ThorQ::UI::LoginWindow::closeEvent(QCloseEvent* event)
+{
+    if (event->spontaneous()) {
+        emit windowClosed();
+    }
+
+    QWidget::closeEvent(event);
 }

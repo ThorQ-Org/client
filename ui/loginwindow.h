@@ -28,6 +28,10 @@ public:
     ThorQ::UI::LoginWidget* loginWidget() const;
     ThorQ::UI::RegisterWidget* registerWidget() const;
     ThorQ::UI::RecoverWidget* recoverWidget() const;
+signals:
+    void windowClosed();
+protected:
+    void closeEvent(QCloseEvent* event) override;
 private:
     ThorQ::UI::LoginWidget* m_loginWidget;
     ThorQ::UI::RegisterWidget* m_registerWidget;
