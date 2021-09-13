@@ -17,6 +17,10 @@ class RegisterWidget : public QWidget
 public:
     RegisterWidget(QWidget *parent = nullptr);
     ~RegisterWidget();
+
+    QString username() const;
+    QString email() const;
+    QString password() const;
 signals:
     void usernameChanged(const QString& email);
     void emailChanged(const QString& email);

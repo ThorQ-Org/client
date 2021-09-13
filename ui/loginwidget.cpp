@@ -60,6 +60,16 @@ ThorQ::UI::LoginWidget::~LoginWidget()
     delete m_headerLayout;
 }
 
+QString ThorQ::UI::LoginWidget::username() const
+{
+    return m_usernameInput->text();
+}
+
+QString ThorQ::UI::LoginWidget::password() const
+{
+    return m_passwordInput->text();
+}
+
 void ThorQ::UI::LoginWidget::setOnlineStatus(const QString& status, QColor color)
 {
     m_onlineStatus->setText(QString("● %1").arg(status));

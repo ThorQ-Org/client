@@ -19,6 +19,9 @@ class LoginWidget : public QWidget
 public:
     LoginWidget(QWidget* parent = nullptr);
     ~LoginWidget();
+
+    QString username() const;
+    QString password() const;
 signals:
     void usernameChanged(const QString& username);
     void passwordChanged(const QString& password);

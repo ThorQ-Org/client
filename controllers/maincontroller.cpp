@@ -1,8 +1,11 @@
 #include "maincontroller.h"
 
 #include "api/client.h"
+#include "api/account.h"
 #include "ui/mainwindow.h"
 #include "ui/loginwindow.h"
+#include "ui/loginwidget.h"
+#include "ui/registerwidget.h"
 #include "constants.h"
 
 #include <QApplication>
@@ -20,6 +23,15 @@ ThorQ::Controllers::MainController::MainController(QObject* parent)
 
     QObject::connect(m_loginWindow, &ThorQ::UI::LoginWindow::windowClosed, this, &ThorQ::Controllers::MainController::handleWindowClose);
     QObject::connect(m_mainWindow, &ThorQ::UI::MainWindow::windowClosed, this, &ThorQ::Controllers::MainController::handleWindowClose);
+
+    QObject::connect(m_loginWindow->loginWidget(), &ThorQ::UI::LoginWidget::loginClicked, [this](){
+        ThorQ::Api::Account::login(m_loginWindow->loginWidget()->username(), m_loginWindow->loginWidget()->password());
+        m_loginWindow->loginWidget()->clearPassword();
+    });
+    QObject::connect(m_loginWindow->registerWidget(), &ThorQ::UI::RegisterWidget::registerClicked, [this](){
+        ThorQ::Api::Account::registerAccount(m_loginWindow->registerWidget()->username(), m_loginWindow->registerWidget()->password(), m_loginWindow->registerWidget()->email());
+        m_loginWindow->registerWidget()->clearPassword();
+    });
 
     m_apiClient->getHealth();
 }

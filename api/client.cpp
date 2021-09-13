@@ -70,6 +70,15 @@ QNetworkRequest ThorQ::Api::Client::createApiRequest(const QUrl& endpoint) const
     return req;
 }
 
+QNetworkRequest ThorQ::Api::Client::createApiRequest(const QUrl& endpoint, const QString& contentType) const
+{
+    QNetworkRequest req = createApiRequest(endpoint);
+
+    req.setHeader(QNetworkRequest::ContentTypeHeader, contentType);
+
+    return req;
+}
+
 QNetworkReply* ThorQ::Api::Client::requestHead(const QNetworkRequest& request) const
 {
     return m_networkAccessManager->head(request);

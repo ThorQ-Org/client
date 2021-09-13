@@ -32,16 +32,37 @@ bool ThorQ::Api::PasswordHash::UpdateFromJson(const QJsonObject& json)
     QJsonValue memLimit = json["ram_limit"];
     QJsonValue algorithm = json["algorithm"];
 
-    if (!saltValue.isString() || opsLimit.isDouble() || memLimit.isDouble() || algorithm.isDouble()) {
+    if (!saltValue.isString() || !opsLimit.isDouble() || !memLimit.isDouble() || !algorithm.isDouble()) {
         return false;
     }
 
     setSalt(saltValue.toString().toUtf8());
-    setOpsLimit(opsLimit.toInt());
-    setMemLimit(memLimit.toInt());
+    setOpsLimit(opsLimit.toInt()); // TODO: possible bad, do manual conversion to string from uint64
+    setMemLimit(memLimit.toInt()); // TODO: possible bad, do manual conversion to string from uint64
     setAlgorithm(algorithm.toInt());
 
     return true;
+}
+
+QJsonObject ThorQ::Api::PasswordHash::ToJsonParams() const
+{
+    QJsonObject json;
+
+    json["salt"] = QString(m_salt.toHex());
+    json["cpu_limit"] = (int)m_opsLimit; // TODO: possible bad, do manual conversion to string from uint64
+    json["ram_limit"] = (int)m_memLimit; // TODO: possible bad, do manual conversion to string from uint64
+    json["algorithm"] = (int)m_algorithm;
+
+    return json;
+}
+
+QJsonObject ThorQ::Api::PasswordHash::ToJsonFull() const
+{
+    QJsonObject json = ToJsonParams();
+
+    json["hash"] = QString(m_hash.toHex());
+
+    return json;
 }
 
 QByteArray ThorQ::Api::PasswordHash::salt() const
@@ -72,14 +93,14 @@ qint32 ThorQ::Api::PasswordHash::algorithm() const
 void ThorQ::Api::PasswordHash::generateSalt()
 {
     randombytes_buf(m_salt.data(), m_salt.size());
-    emit saltChanged();
+    emit saltChanged(m_salt);
 }
 
 void ThorQ::Api::PasswordHash::setSalt(const QByteArray& salt)
 {
     if (m_salt != salt) {
         m_salt = salt;
-        emit saltChanged();
+        emit saltChanged(salt);
     }
 }
 
@@ -87,7 +108,7 @@ void ThorQ::Api::PasswordHash::setOpsLimit(quint64 opsLimit)
 {
     if (m_opsLimit != opsLimit) {
         m_opsLimit = opsLimit;
-        emit opsLimitChanged();
+        emit opsLimitChanged(opsLimit);
     }
 }
 
@@ -95,7 +116,7 @@ void ThorQ::Api::PasswordHash::setMemLimit(quint64 memLimit)
 {
     if (m_memLimit != memLimit) {
         m_memLimit = memLimit;
-        emit memLimitChanged();
+        emit memLimitChanged(memLimit);
     }
 }
 
@@ -103,7 +124,7 @@ void ThorQ::Api::PasswordHash::setAlgorithm(qint32 algorithm)
 {
     if (m_algorithm != algorithm) {
         m_algorithm = algorithm;
-        emit algorithmChanged();
+        emit algorithmChanged(algorithm);
     }
 }
 
@@ -141,7 +162,7 @@ void ThorQ::Api::PasswordHash::handleWorkerDone(const QByteArray& hash)
 {
     if (m_hash != hash) {
         m_hash = hash;
-        emit hashGenerated();
+        emit hashGenerated(hash);
     }
 }
 

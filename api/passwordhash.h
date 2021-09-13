@@ -29,6 +29,8 @@ public:
     ~PasswordHash();
 
     bool UpdateFromJson(const QJsonObject& json);
+    QJsonObject ToJsonParams() const;
+    QJsonObject ToJsonFull() const;
 
     QByteArray salt() const;
     QByteArray hash() const;
@@ -36,12 +38,12 @@ public:
     quint64 memLimit() const;
     qint32 algorithm() const;
 signals:
-    void saltChanged();
-    void opsLimitChanged();
-    void memLimitChanged();
-    void algorithmChanged();
+    void saltChanged(const QByteArray& salt);
+    void opsLimitChanged(quint64 opsLimit);
+    void memLimitChanged(quint64 memLimit);
+    void algorithmChanged(qint32 algorithm);
 
-    void hashGenerated();
+    void hashGenerated(const QByteArray& hash);
     void hashFailed();
 public slots:
     void generateSalt();

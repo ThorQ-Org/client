@@ -70,6 +70,21 @@ ThorQ::UI::RegisterWidget::~RegisterWidget()
 {
 }
 
+QString ThorQ::UI::RegisterWidget::username() const
+{
+    return m_usernameInput->text();
+}
+
+QString ThorQ::UI::RegisterWidget::email() const
+{
+    return m_emailInput->text();
+}
+
+QString ThorQ::UI::RegisterWidget::password() const
+{
+    return m_passwordInput->text();
+}
+
 void ThorQ::UI::RegisterWidget::invalidateUsername(const QString& reason)
 {
     m_usernameInput->showError(reason);

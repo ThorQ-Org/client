@@ -12,6 +12,9 @@ class Account : public ThorQ::Api::ApiObject
     Q_OBJECT
     Q_DISABLE_COPY(Account)
 public:
+    static void login(const QString& username, const QString& password);
+    static void registerAccount(const QString& username, const QString& password, const QString& email);
+
     Account(ThorQ::Api::Client* apiClient);
     Account(ThorQ::Api::ApiObject* apiObject);
 

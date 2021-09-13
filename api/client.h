@@ -28,6 +28,7 @@ public:
     ThorQ::Api::Account* currentAccount() const;
 
     QNetworkRequest createApiRequest(const QUrl& endpoint) const;
+    QNetworkRequest createApiRequest(const QUrl& endpoint, const QString& contentType) const;
     QNetworkReply* requestHead(const QNetworkRequest& request) const;
     QNetworkReply* requestGet(const QNetworkRequest& request) const;
     QNetworkReply* requestPost(const QNetworkRequest& request, const QByteArray& dataurl) const;
