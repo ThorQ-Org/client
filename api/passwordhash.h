@@ -28,9 +28,9 @@ public:
     PasswordHash(QObject* parent = nullptr);
     ~PasswordHash();
 
-    bool UpdateFromJson(const QJsonObject& json);
-    QJsonObject ToJsonParams() const;
-    QJsonObject ToJsonFull() const;
+    bool updateFromJson(const QJsonObject& json);
+    QJsonObject toJsonParams() const;
+    QJsonObject toJsonFull() const;
 
     QByteArray salt() const;
     QByteArray hash() const;
@@ -39,25 +39,25 @@ public:
     qint32 algorithm() const;
 signals:
     void saltChanged(const QByteArray& salt);
+    void hashChanged(const QByteArray& hash);
     void opsLimitChanged(quint64 opsLimit);
     void memLimitChanged(quint64 memLimit);
     void algorithmChanged(qint32 algorithm);
 
-    void hashGenerated(const QByteArray& hash);
-    void hashFailed();
+    void hashingDone(const QByteArray& hash);
 public slots:
     void generateSalt();
     void setSalt(const QByteArray& salt);
+
+    void generateHash(const QString& password);
+    void setHash(const QByteArray& hash);
 
     void setOpsLimit(quint64 opsLimit);
     void setMemLimit(quint64 memLimit);
     void setAlgorithm(qint32 algorithm);
     void setPerformance(PerformancePresets performance);
-
-    void generateHash(const QString& password);
 private slots:
     void handleWorkerDone(const QByteArray& hash);
-    void handleWorkerFailed();
 private:
     QByteArray m_salt;
     QByteArray m_hash;
@@ -73,8 +73,7 @@ class HashingThread : public QThread {
 public:
     HashingThread(const QByteArray& passwordUtf8, const QByteArray& salt, std::uint64_t opsLimit, std::uint64_t memLimit, std::int32_t algorithm, QObject* parent = nullptr);
 signals:
-    void hashReady(const QByteArray& hash);
-    void hashFailed();
+    void hashDone(const QByteArray& hash);
 private:
     void run() override;
 

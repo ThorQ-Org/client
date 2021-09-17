@@ -25,7 +25,7 @@ ThorQ::Api::PasswordHash::~PasswordHash()
 {
 }
 
-bool ThorQ::Api::PasswordHash::UpdateFromJson(const QJsonObject& json)
+bool ThorQ::Api::PasswordHash::updateFromJson(const QJsonObject& json)
 {
     QJsonValue saltValue = json["salt"];
     QJsonValue opsLimit = json["cpu_limit"];
@@ -44,7 +44,7 @@ bool ThorQ::Api::PasswordHash::UpdateFromJson(const QJsonObject& json)
     return true;
 }
 
-QJsonObject ThorQ::Api::PasswordHash::ToJsonParams() const
+QJsonObject ThorQ::Api::PasswordHash::toJsonParams() const
 {
     QJsonObject json;
 
@@ -56,9 +56,9 @@ QJsonObject ThorQ::Api::PasswordHash::ToJsonParams() const
     return json;
 }
 
-QJsonObject ThorQ::Api::PasswordHash::ToJsonFull() const
+QJsonObject ThorQ::Api::PasswordHash::toJsonFull() const
 {
-    QJsonObject json = ToJsonParams();
+    QJsonObject json = toJsonParams();
 
     json["hash"] = QString(m_hash.toHex());
 
@@ -101,6 +101,22 @@ void ThorQ::Api::PasswordHash::setSalt(const QByteArray& salt)
     if (m_salt != salt) {
         m_salt = salt;
         emit saltChanged(salt);
+    }
+}
+
+void ThorQ::Api::PasswordHash::generateHash(const QString& password)
+{
+    ThorQ::Api::Internal::HashingThread* worker = new ThorQ::Api::Internal::HashingThread(password.toUtf8(), m_salt, m_opsLimit, m_memLimit, m_algorithm, this);
+    connect(worker, &ThorQ::Api::Internal::HashingThread::hashDone, this, &ThorQ::Api::PasswordHash::handleWorkerDone);
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
+}
+
+void ThorQ::Api::PasswordHash::setHash(const QByteArray& hash)
+{
+    if (m_hash != hash) {
+        m_hash = hash;
+        emit hashChanged(hash);
     }
 }
 
@@ -149,26 +165,10 @@ void ThorQ::Api::PasswordHash::setPerformance(ThorQ::Api::PasswordHash::Performa
     }
 }
 
-void ThorQ::Api::PasswordHash::generateHash(const QString& password)
-{
-    ThorQ::Api::Internal::HashingThread* worker = new ThorQ::Api::Internal::HashingThread(password.toUtf8(), m_salt, m_opsLimit, m_memLimit, m_algorithm, this);
-    connect(worker, &ThorQ::Api::Internal::HashingThread::hashReady, this, &ThorQ::Api::PasswordHash::handleWorkerDone);
-    connect(worker, &ThorQ::Api::Internal::HashingThread::hashFailed, this, &ThorQ::Api::PasswordHash::handleWorkerFailed);
-    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
-    worker->start();
-}
-
 void ThorQ::Api::PasswordHash::handleWorkerDone(const QByteArray& hash)
 {
-    if (m_hash != hash) {
-        m_hash = hash;
-        emit hashGenerated(hash);
-    }
-}
-
-void ThorQ::Api::PasswordHash::handleWorkerFailed()
-{
-    emit hashFailed();
+    setHash(hash);
+    emit hashingDone(hash);
 }
 
 ThorQ::Api::Internal::HashingThread::HashingThread(const QByteArray& passwordUtf8, const QByteArray& salt, std::uint64_t opsLimit, std::uint64_t memLimit, std::int32_t algorithm, QObject* parent)
@@ -193,9 +193,12 @@ void ThorQ::Api::Internal::HashingThread::run()
                 m_opsLimit,
                 m_memLimit,
                 m_algorithm
-                ) == 0) {
-        emit hashReady(hash);
-    } else {
-        emit hashFailed();
+                ) != 0) {
+        hash.resize(0);
     }
+
+    m_passwordUtf8.fill(' ');
+    m_passwordUtf8.resize(0);
+
+    emit hashDone(hash);
 }

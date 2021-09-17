@@ -24,16 +24,18 @@ public:
     ~NamedLineEdit();
 
     QString text() const;
+    bool isInputValid() const;
 signals:
     void textChanged();
     void editingFinished();
+    void isInputValidChanged(bool isValid);
 public slots:
-    void setName(QString name);
+    void setName(const QString& name);
 
-    void setText(QString text);
+    void setText(const QString& text);
     void clearText();
 
-    void showError(QString error);
+    void showError(const QString& error);
     void showError();
     void hideError();
 
@@ -42,7 +44,8 @@ public slots:
     void setSimpleText(bool isSimple);
     void setInputValidator(ThorQ::Validators::FuncType inputValidator);
 private slots:
-    void handleEditingFinished();
+    bool validateInput(const QString& text);
+    void handleTextEdited();
 private:
     QLabel* m_labelTitle;
     QLineEdit* m_lineEdit;
@@ -50,6 +53,7 @@ private:
     QVBoxLayout* m_layout;
 
     bool m_simpleText;
+    bool m_isInputValid;
     ThorQ::Validators::FuncType m_inputValidator;
 
     int m_lastValueLength;

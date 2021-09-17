@@ -26,9 +26,9 @@ public:
 private slots:
     void handleWindowClose();
 private:
-    ThorQ::Api::Client* m_apiClient;
     ThorQ::UI::LoginWindow* m_loginWindow;
     ThorQ::UI::MainWindow* m_mainWindow;
+    ThorQ::Api::Client* m_apiClient;
 };
 
 }

@@ -25,34 +25,40 @@ ThorQ::UI::LoginWidget::LoginWidget(QWidget* parent)
 
     setOnlineStatus("Offline", QColor::fromRgb(255, 0, 0));
 
+    // Username input
     m_usernameInput->setName(tr("Username"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
-    m_usernameInput->setSimpleText(true);
+    m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
+    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handleUsernameInputChanged);
+    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_loginButton, &QPushButton::setEnabled);
 
+    // Password input
     m_passwordInput->setName(tr("Password"));
     m_passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
+    m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
+    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handlePasswordInputChanged);
+    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_loginButton, &QPushButton::setEnabled);
 
+    // Login button
     m_loginButton->setText(tr("Login"));
     m_loginButton->setCursor(Qt::PointingHandCursor);
+    m_loginButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_loginButton->setEnabled(false);
+    QObject::connect(m_loginButton, &QPushButton::clicked, this, &ThorQ::UI::LoginWidget::handleLoginClicked);
 
+    // Layout
     m_headerLayout->setAlignment(Qt::AlignTop);
     m_headerLayout->setContentsMargins(0, 0, 0, 0);
     m_headerLayout->addWidget(m_title);
     m_headerLayout->addWidget(m_onlineStatus);
-
     m_mainLayout->setContentsMargins(12, 12, 12, 12);
-    m_mainLayout->addLayout(m_headerLayout, 1);
+    m_mainLayout->addLayout(m_headerLayout, 0);
     m_mainLayout->addWidget(m_usernameInput);
     m_mainLayout->addWidget(m_passwordInput);
     m_mainLayout->addWidget(m_loginButton);
-
     setLayout(m_mainLayout);
-
-    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handleUsernameInputChanged);
-    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handlePasswordInputChanged);
-    QObject::connect(m_loginButton, &QPushButton::clicked, this, &ThorQ::UI::LoginWidget::handleLoginClicked);
 }
 
 ThorQ::UI::LoginWidget::~LoginWidget()

@@ -13,6 +13,7 @@ ThorQ::UI::NamedLineEdit::NamedLineEdit(QWidget* parent)
     , m_labelError(new ErrorLabel(this))
     , m_layout(new QVBoxLayout(this))
     , m_simpleText(false)
+    , m_isInputValid(true)
     , m_inputValidator(ThorQ::Validators::FunctionPlaceholder)
     , m_lastValueLength(0)
     , m_lastValueHash()
@@ -35,7 +36,8 @@ ThorQ::UI::NamedLineEdit::NamedLineEdit(QWidget* parent)
     m_layout->addWidget(m_labelError);
     m_layout->setSpacing(0);
 
-    QObject::connect(m_lineEdit, &QLineEdit::editingFinished, this, &ThorQ::UI::NamedLineEdit::handleEditingFinished);
+    QObject::connect(m_lineEdit, &QLineEdit::textEdited, this, &ThorQ::UI::NamedLineEdit::handleTextEdited);
+    QObject::connect(m_lineEdit, &QLineEdit::editingFinished, this, &ThorQ::UI::NamedLineEdit::handleTextEdited);
 }
 
 ThorQ::UI::NamedLineEdit::~NamedLineEdit()
@@ -47,12 +49,17 @@ QString ThorQ::UI::NamedLineEdit::text() const
     return m_lineEdit->text();
 }
 
-void ThorQ::UI::NamedLineEdit::setName(QString name)
+bool ThorQ::UI::NamedLineEdit::isInputValid() const
+{
+    return m_isInputValid;
+}
+
+void ThorQ::UI::NamedLineEdit::setName(const QString& name)
 {
     m_labelTitle->setText(name);
 }
 
-void ThorQ::UI::NamedLineEdit::setText(QString text)
+void ThorQ::UI::NamedLineEdit::setText(const QString& text)
 {
     m_lineEdit->setText(text);
 }
@@ -62,7 +69,7 @@ void ThorQ::UI::NamedLineEdit::clearText()
     m_lineEdit->setText("");
 }
 
-void ThorQ::UI::NamedLineEdit::showError(QString error)
+void ThorQ::UI::NamedLineEdit::showError(const QString& error)
 {
     m_labelError->setText(error);
     m_labelError->show();
@@ -94,9 +101,29 @@ void ThorQ::UI::NamedLineEdit::setSimpleText(bool isSimple)
 void ThorQ::UI::NamedLineEdit::setInputValidator(ThorQ::Validators::FuncType validator)
 {
     m_inputValidator = validator;
+    validateInput(m_lineEdit->text());
 }
 
-void ThorQ::UI::NamedLineEdit::handleEditingFinished()
+bool ThorQ::UI::NamedLineEdit::validateInput(const QString& text)
+{
+    auto validation = m_inputValidator(text);
+
+    if (!validation.first) {
+        showError(validation.second);
+    } else {
+        hideError();
+    }
+
+    if (m_isInputValid != validation.first) {
+        m_isInputValid = validation.first;
+
+        emit isInputValidChanged(validation.first);
+    }
+
+    return true;
+}
+
+void ThorQ::UI::NamedLineEdit::handleTextEdited()
 {
     emit editingFinished();
 
@@ -106,10 +133,7 @@ void ThorQ::UI::NamedLineEdit::handleEditingFinished()
         m_lineEdit->setText(text);
     }
 
-    auto validation = m_inputValidator(text);
-
-    if (!validation.first) {
-        showError(validation.second);
+    if (!validateInput(text)) {
         return;
     }
 

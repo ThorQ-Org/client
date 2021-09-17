@@ -17,12 +17,13 @@ ThorQ::UI::RecoverWidget::RecoverWidget(QWidget* parent)
     m_emailInput->setEchoMode(QLineEdit::EchoMode::Normal);
     m_emailInput->setSimpleText(true);
     m_emailInput->setInputValidator(ThorQ::Validators::EmailValidator);
-    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, m_emailInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RecoverWidget::handleEmailInputChanged);
+    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_recoverButton, &QPushButton::setEnabled);
 
     // Recover button
     m_recoverButton->setText(tr("Recover"));
     m_recoverButton->setCursor(Qt::PointingHandCursor);
+    m_recoverButton->setEnabled(false);
     QObject::connect(m_recoverButton, &QPushButton::clicked, this, &ThorQ::UI::RecoverWidget::handleRecoverClicked);
 
     // Layout

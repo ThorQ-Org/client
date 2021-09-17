@@ -17,20 +17,13 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     , m_registerButton(new QPushButton(this))
     , m_layout(new QVBoxLayout(this))
 {
-    // Register button
-    m_registerButton->setText(tr("Register"));
-    m_registerButton->setCursor(Qt::PointingHandCursor);
-    m_registerButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    QObject::connect(m_registerButton, &QPushButton::clicked, this, &ThorQ::UI::RegisterWidget::handleRegisterClicked);
-
     // Username input
     m_usernameInput->setName(tr("Username"));
     m_usernameInput->setEchoMode(QLineEdit::EchoMode::Normal);
-    m_usernameInput->setSimpleText(true);
     m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
-    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, m_usernameInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleUsernameInputChanged);
+    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
 
     // Email input
     m_emailInput->setName(tr("Email"));
@@ -38,16 +31,16 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_emailInput->setSimpleText(true);
     m_emailInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_emailInput->setInputValidator(ThorQ::Validators::EmailValidator);
-    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, m_emailInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleEmailInputChanged);
+    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
 
     // Password input
     m_passwordInput->setName(tr("Password"));
     m_passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
     m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
-    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_passwordInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
+    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
 
     // Confirm password input
     m_confirmPasswordInput->setName(tr("Confirm Password"));
@@ -55,6 +48,13 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_confirmPasswordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
+
+    // Register button
+    m_registerButton->setText(tr("Register"));
+    m_registerButton->setCursor(Qt::PointingHandCursor);
+    m_registerButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_registerButton->setEnabled(false);
+    QObject::connect(m_registerButton, &QPushButton::clicked, this, &ThorQ::UI::RegisterWidget::handleRegisterClicked);
 
     // Layout
     m_layout->setContentsMargins(12, 12, 12, 12);
@@ -131,7 +131,14 @@ void ThorQ::UI::RegisterWidget::handleEmailInputChanged()
 void ThorQ::UI::RegisterWidget::handlePasswordInputChanged()
 {
     QString password = m_passwordInput->text();
-    if (password == m_confirmPasswordInput->text()) {
+
+    bool passwordsMatch = password == m_confirmPasswordInput->text();
+
+    m_registerButton->setEnabled(passwordsMatch);
+
+    if (passwordsMatch) {
         emit passwordChanged(password);
+    } else {
+        m_confirmPasswordInput->showError("Passwords do not match");
     }
 }
