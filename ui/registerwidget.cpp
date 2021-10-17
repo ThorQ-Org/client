@@ -23,7 +23,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleUsernameInputChanged);
-    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
+    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::RegisterWidget::handleInputValidChanged);
 
     // Email input
     m_emailInput->setName(tr("Email"));
@@ -32,7 +32,7 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_emailInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_emailInput->setInputValidator(ThorQ::Validators::EmailValidator);
     QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handleEmailInputChanged);
-    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
+    QObject::connect(m_emailInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::RegisterWidget::handleInputValidChanged);
 
     // Password input
     m_passwordInput->setName(tr("Password"));
@@ -40,14 +40,14 @@ ThorQ::UI::RegisterWidget::RegisterWidget(QWidget *parent)
     m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
-    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_registerButton, &QPushButton::setEnabled);
+    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::RegisterWidget::handleInputValidChanged);
 
     // Confirm password input
     m_confirmPasswordInput->setName(tr("Confirm Password"));
     m_confirmPasswordInput->setEchoMode(QLineEdit::EchoMode::Password);
     m_confirmPasswordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::hideError);
     QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::RegisterWidget::handlePasswordInputChanged);
+    QObject::connect(m_confirmPasswordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::RegisterWidget::handleInputValidChanged);
 
     // Register button
     m_registerButton->setText(tr("Register"));
@@ -113,11 +113,6 @@ void ThorQ::UI::RegisterWidget::clearPassword()
     m_confirmPasswordInput->clearText();
 }
 
-void ThorQ::UI::RegisterWidget::handleRegisterClicked()
-{
-    emit registerClicked();
-}
-
 void ThorQ::UI::RegisterWidget::handleUsernameInputChanged()
 {
     emit usernameChanged(m_usernameInput->text());
@@ -141,4 +136,14 @@ void ThorQ::UI::RegisterWidget::handlePasswordInputChanged()
     } else {
         m_confirmPasswordInput->showError("Passwords do not match");
     }
+}
+
+void ThorQ::UI::RegisterWidget::handleInputValidChanged()
+{
+    m_registerButton->setEnabled(m_usernameInput->isInputValid() && m_emailInput->isInputValid() && m_passwordInput->isInputValid() && m_confirmPasswordInput->isInputValid());
+}
+
+void ThorQ::UI::RegisterWidget::handleRegisterClicked()
+{
+    emit registerClicked();
 }

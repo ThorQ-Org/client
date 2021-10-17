@@ -33,10 +33,11 @@ public slots:
     void clearForms();
     void clearPassword();
 private slots:
-    void handleRegisterClicked();
     void handleUsernameInputChanged();
     void handleEmailInputChanged();
     void handlePasswordInputChanged();
+    void handleInputValidChanged();
+    void handleRegisterClicked();
 private:
     NamedLineEdit* m_usernameInput;
     NamedLineEdit* m_emailInput;

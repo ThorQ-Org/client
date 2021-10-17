@@ -31,7 +31,7 @@ ThorQ::UI::LoginWidget::LoginWidget(QWidget* parent)
     m_usernameInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_usernameInput->setInputValidator(ThorQ::Validators::UsernameValidator);
     QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handleUsernameInputChanged);
-    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_loginButton, &QPushButton::setEnabled);
+    QObject::connect(m_usernameInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::LoginWidget::handleInputValidChanged);
 
     // Password input
     m_passwordInput->setName(tr("Password"));
@@ -39,7 +39,7 @@ ThorQ::UI::LoginWidget::LoginWidget(QWidget* parent)
     m_passwordInput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_passwordInput->setInputValidator(ThorQ::Validators::PasswordValidator);
     QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::textChanged, this, &ThorQ::UI::LoginWidget::handlePasswordInputChanged);
-    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, m_loginButton, &QPushButton::setEnabled);
+    QObject::connect(m_passwordInput, &ThorQ::UI::NamedLineEdit::isInputValidChanged, this, &ThorQ::UI::LoginWidget::handleInputValidChanged);
 
     // Login button
     m_loginButton->setText(tr("Login"));
@@ -114,6 +114,11 @@ void ThorQ::UI::LoginWidget::handlePasswordInputChanged()
 {
     m_passwordInput->hideError();
     emit passwordChanged(m_passwordInput->text());
+}
+
+void ThorQ::UI::LoginWidget::handleInputValidChanged()
+{
+    m_loginButton->setEnabled(m_usernameInput->isInputValid() && m_passwordInput->isInputValid());
 }
 
 void ThorQ::UI::LoginWidget::handleLoginClicked()

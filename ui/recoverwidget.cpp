@@ -46,12 +46,12 @@ void ThorQ::UI::RecoverWidget::clearForms()
     m_emailInput->clearText();
 }
 
-void ThorQ::UI::RecoverWidget::handleRecoverClicked()
-{
-    emit recoverClicked();
-}
-
 void ThorQ::UI::RecoverWidget::handleEmailInputChanged()
 {
     emit emailChanged(m_emailInput->text());
+}
+
+void ThorQ::UI::RecoverWidget::handleRecoverClicked()
+{
+    emit recoverClicked();
 }

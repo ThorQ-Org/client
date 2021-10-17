@@ -35,6 +35,7 @@ public slots:
 private slots:
     void handleUsernameInputChanged();
     void handlePasswordInputChanged();
+    void handleInputValidChanged();
     void handleLoginClicked();
 private:
     QLabel* m_title;
