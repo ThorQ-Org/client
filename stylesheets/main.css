@@ -30,7 +30,10 @@ QPushButton:hover {
     background-color: rgba(0, 143, 255, 1);
 }
 QPushButton:pressed {
-    background-color: rgba(29, 173, 255, 1);
+    background-color: rgba(0, 64, 128, 1);
+}
+QPushButton:disabled {
+    background-color: rgba(128, 128, 128, 1);
 }
 
 QLineEdit {
