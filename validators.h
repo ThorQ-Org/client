@@ -1,11 +1,11 @@
 #ifndef THORQ_VALIDATORS_H
 #define THORQ_VALIDATORS_H
 
-#include <QPair>
 #include <QString>
 #include <QStringView>
 
 #include <functional>
+#include <utility>
 
 namespace ThorQ::Validators {
 

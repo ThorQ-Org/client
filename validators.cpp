@@ -76,26 +76,28 @@ constexpr bool IsValidLocalPart(const QChar*& it)
 constexpr bool IsValidDomainPart(const QChar*& it)
 {
     QChar c = 0;
+    unsigned int n = 0;
     do {
-        const QChar* startIt = it;
+        const QChar* dnsLabelStartIt = it;
         if (!IsAlhaNumericChar(*it++)) {
             return false;
         }
 
         while (IsAlhaNumericChar(*it)) { it++; }
 
-        int dnsLabelLen = it - startIt;
+        int dnsLabelLen = it - dnsLabelStartIt;
         if (dnsLabelLen > 63) {
             return false;
         }
 
         c = *it++;
+        n++;
     }
-    while (c == '-' || c == '.');
+    while (c == '.');
 
     it--;
 
-    return c == 0;
+    return c == 0 && n > 1;
 }
 
 ThorQ::Validators::RetType ThorQ::Validators::EmailValidator(ThorQ::Validators::ArgType email)
